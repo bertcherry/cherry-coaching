@@ -1,3 +1,7 @@
+Cherry Coaching website initialized with Create React App and C3 for Cloudflare pages deployment
+
+--
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
