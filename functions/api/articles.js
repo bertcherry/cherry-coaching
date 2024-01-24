@@ -1,5 +1,5 @@
-import articles from './article/data'
+import articles from './article/data';
 
 export function onRequestGet() {
-    return Response.json(articles)
+    return Response.json(articles);
 }

@@ -15,4 +15,4 @@ const articles = [
     },
 ];
 
-export default articles
+export default articles;
