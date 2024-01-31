@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { Stream } from "@cloudflare/stream-react";
 
 const Video = () => {
     const [video, setVideo] = useState({});
@@ -20,10 +21,10 @@ const Video = () => {
     return (
         <div>
             <h1>{video.title}</h1>
+            <div>
+                <Stream controls src={video.uid} />
+            </div>
             <p>{video.description}</p>
-            <p>
-                <em>Published {new Date(video.published_at).toLocaleString()}</em>
-            </p>
             <p>
                 <Link to="/">Go back</Link>
             </p>

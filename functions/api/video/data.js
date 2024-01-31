@@ -4,6 +4,7 @@ const videos = [
         title: 'Video 1',
         description: 'For this exercise, do the following...',
         published_at: new Date('2020-10-23'),
+        uid: '97f8abdcf83e358090db930d093b896f',
     },
     {
         id: 2,
