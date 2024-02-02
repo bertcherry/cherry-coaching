@@ -1,17 +1,16 @@
-import videos from './data'
-
-export function onRequestGet(context) {
-    const id = context.params.id
+export async function onRequestGet(context) {
+    const id = context.params.id;
 
     if (!id) {
         return new Response('Not found', { status: 404 })
     }
 
-    const video = videos.find(video => video.id === Number(id))
+    const ps = context.env.videoDB.prepare(`SELECT * FROM data WHERE id = '${id}' LIMIT 1`);
+    const { results } = await ps.all();
 
-    if (!video) {
-        return new Response('Not found', { status: 404 })
+    if (!results) {
+        return new Response('Not found', { status: 404 });
     }
 
-    return Response.json(video)
+    return Response.json(results[0]);
 }

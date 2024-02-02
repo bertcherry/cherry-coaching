@@ -17,12 +17,14 @@ const Video = () => {
     }, [id]);
 
     if (!Object.keys(video).length) return <div />;
+    
+    console.log(video);
 
     return (
         <div>
-            <h1>{video.title}</h1>
+            <h1>{video.name}</h1>
             <div>
-                <Stream controls src={video.uid} />
+                <Stream controls src={video.id} />
             </div>
             <p>{video.description}</p>
             <p>
