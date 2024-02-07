@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Stream } from "@cloudflare/stream-react";
+import Nav from './Nav/Nav';
 
 const Video = () => {
     const [video, setVideo] = useState({});
@@ -22,6 +23,7 @@ const Video = () => {
 
     return (
         <div>
+            <Nav />
             <h1>{video.name}</h1>
             <div>
                 <Stream controls src={video.id} />

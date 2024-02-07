@@ -1,0 +1,24 @@
+.banner {
+    background-color: var(--white);
+    display: flex;
+    justify-content: space-between;
+    max-height: 150px;
+    margin: 20px;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.logo > img {
+    height: 100%
+}
+
+nav {
+    align-self: center;
+    padding-right: 20px;
+}
+
+.navList {
+    list-style-type: none;
+    display: flex;
+    gap: 20px;
+}
