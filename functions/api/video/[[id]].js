@@ -5,7 +5,7 @@ export async function onRequestGet(context) {
         return new Response('Not found', { status: 404 })
     }
 
-    const ps = context.env.videoDB.prepare(`SELECT * FROM data WHERE id = '${id}' LIMIT 1`);
+    const ps = context.env.videoDB.prepare(`SELECT * FROM demos WHERE id = '${id}' LIMIT 1`);
     const { results } = await ps.all();
 
     if (!results) {
