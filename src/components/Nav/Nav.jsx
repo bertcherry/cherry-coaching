@@ -5,7 +5,7 @@ import logo from '../../assets/CherryCoachingLogo.png';
 function Nav() {
     return (
         <div className={styles.banner}>
-            <div className={styles.logo}><img src={logo} alt='Cherry Coaching'/></div>
+            <Link to='/' className={styles.logo}><img src={logo} alt='Cherry Coaching'/></Link>
             <nav>
                 <ul className={styles.navList}>
                     <li><Link to='/'>Home</Link></li>
