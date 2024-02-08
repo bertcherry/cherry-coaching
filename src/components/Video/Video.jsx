@@ -28,7 +28,7 @@ const Video = () => {
                 <div className={styles.videoContainer}>
                     <Stream controls src={video.id} />
                 </div>
-                <p className={styles.videoDescription}>{video.description}</p>
+                <p>{video.description}</p>
             </div>
         </div>
     );
