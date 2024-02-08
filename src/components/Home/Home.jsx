@@ -1,11 +1,9 @@
-import Nav from '../Nav/Nav';
 import styles from './Home.module.css';
 import outdoors from '../../assets/Bert Outdoors.jpg';
 
 const Home = () => {
     return (
-        <div className={styles.container}>
-            <Nav />
+        <>
             <div className={styles.homeDisplay}>
                 <div className={styles.imgContainer}>
                     <img src={outdoors} alt='Bert, a white person with colorful hair, stands outside holding a kettlebell and smiling in front of a group of people.'/>
@@ -22,7 +20,7 @@ const Home = () => {
                 <div>Services are offered on a <a href='https://docs.google.com/document/d/1x4m2mbG5s-C7Ns5vZETRU3ZO--vL6rbeWUiyKBZyeGE/edit?usp=sharing'>flexible pricing structure</a> with rates ranging from $90-130 per hour-long session payed via Venmo, PayPal, or cash.</div>
                 <a className={styles.btn} href='https://docs.google.com/forms/d/e/1FAIpQLSemCFI-iCeKT35uLwsFK8yb3fAEyi4oUv151rJuMQkQ3mI8Lg/viewform?usp=sharing'>Interest Form</a>
             </div>
-        </div>
+        </>
     )
 }
 
