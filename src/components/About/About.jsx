@@ -1,6 +1,6 @@
 import Nav from '../Nav/Nav';
 import styles from './About.module.css';
-import headshot from '../../assets/headshot.JPEG';
+import headshot from '../../assets/headshot.jpeg';
 
 const Home = () => {
     return (
