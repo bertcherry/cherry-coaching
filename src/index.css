@@ -5,18 +5,21 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  box-sizing: border-box;
   
   --black: black;
   --white: white;
   --red: #d34f4f;
-  --peach: #fae9e9;
+  --peach: #fbd4d0;
+  --light-peach: #fae9e9;
   --green: #7bb533;
 }
 
 body {
   margin: 0;
   background-color: var(--black);
-  color: var(--peach);
+  color: var(--light-peach);
 }
 
 code {
