@@ -1,16 +1,24 @@
-.aboutDisplay {
-    display: flex;
-    gap: 20px;
-    align-items: center;
+.aboutDisplay {   
     max-width: 960px;
     margin: 10px;
 }
 
+.flexContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    align-items: center;
+    justify-content: center;
+}
+
 .imgContainer {
-    width: clamp(150px, 50%, 300px);
-    flex-shrink: 0;
+    flex: 0 1 300px;
 }
 
 .imgContainer > img {
     width: 100%;
+}
+
+.bioContainer {
+    flex: 350px;
 }
