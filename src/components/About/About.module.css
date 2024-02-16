@@ -22,3 +22,7 @@
 .bioContainer {
     flex: 350px;
 }
+
+.bioContainer > * {
+    margin-bottom: 10px;
+}
