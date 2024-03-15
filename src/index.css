@@ -11,7 +11,7 @@
   --black: black;
   --white: white;
   --red: #d34f4f;
-  --peach: #fbd4d0;
+  --peach: #fba8a0;
   --light-peach: #fae9e9;
   --green: #7bb533;
 }
@@ -36,7 +36,7 @@ code {
 
 a {
   font-weight: 600;
-  color: var(--red);
+  color: var(--peach);
   text-decoration: inherit;
 }
 

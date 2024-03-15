@@ -1,5 +1,5 @@
 .banner {
-    background-color: var(--white);
+    background-color: var(--black);
     display: flex;
     justify-content: space-between;
     padding: 10px;
