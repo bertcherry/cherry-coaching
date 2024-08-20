@@ -1,9 +1,11 @@
 import styles from './Home.module.css';
 import outdoors from '../../assets/Bert Outdoors.jpg';
+import PageTitle from '../PageTitle';
 
 const Home = () => {
     return (
         <>
+            <PageTitle title="Cherry Coaching" />
             <div className={styles.homeDisplay}>
                 <div className={styles.imgContainer}>
                     <img src={outdoors} alt='Bert, a white person with colorful hair, stands outside holding a kettlebell and smiling in front of a group of people.'/>

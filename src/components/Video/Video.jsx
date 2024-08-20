@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Stream } from "@cloudflare/stream-react";
 import styles from './Video.module.css';
+import PageTitle from '../PageTitle';
 
 const Video = () => {
     const [video, setVideo] = useState({});
@@ -21,6 +22,7 @@ const Video = () => {
 
     return (
         <>
+            <PageTitle title={video.name} />
             <div className={styles.videoDisplay}>
                 <h1>{video.name}</h1>
                 <div className={styles.videoContainer}>

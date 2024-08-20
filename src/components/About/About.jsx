@@ -1,9 +1,11 @@
 import styles from './About.module.css';
 import headshot from '../../assets/headshot.jpeg';
+import PageTitle from '../PageTitle';
 
 const Home = () => {
     return (
         <>
+            <PageTitle title="About" />
             <div className={styles.aboutDisplay}>
                 <h1>Bert Cherry (she/they)</h1>
                 <h2>NSCA Certified Strength & Conditioning Coach, USA Weightlifting Sport Performance Coach</h2> 
