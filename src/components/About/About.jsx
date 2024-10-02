@@ -1,11 +1,14 @@
 import styles from './About.module.css';
 import headshot from '../../assets/headshot.jpeg';
-import PageTitle from '../PageTitle';
+import { Helmet } from 'react-helmet';
 
-const Home = () => {
+const About = () => {
     return (
         <>
-            <PageTitle title="About" />
+            <Helmet>
+                <title>About</title>
+                <meta name="description" content="Bert Cherry (she/they) - NSCA Certified Strength & Conditioning Coach, USA Weightlifting Sport Performance Coach"/>
+            </Helmet>
             <div className={styles.aboutDisplay}>
                 <h1>Bert Cherry (she/they)</h1>
                 <h2>NSCA Certified Strength & Conditioning Coach, USA Weightlifting Sport Performance Coach</h2> 
@@ -32,4 +35,4 @@ const Home = () => {
     )
 }
 
-export default Home;
+export default About;
