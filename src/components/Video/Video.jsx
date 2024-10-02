@@ -23,6 +23,7 @@ const Video = () => {
     return (
         <>
             <PageTitle title={video.name} />
+            <meta name="description" content={video.description} />
             <div className={styles.videoDisplay}>
                 <h1>{video.name}</h1>
                 <div className={styles.videoContainer}>
