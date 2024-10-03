@@ -7,9 +7,11 @@ import { BrowserRouter } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+const helmetContext = {};
+
 root.render(
   <React.StrictMode>
-    <HelmetProvider>
+    <HelmetProvider context={helmetContext}>
       <BrowserRouter>
         <App />
       </BrowserRouter>
