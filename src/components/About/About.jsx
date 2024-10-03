@@ -1,14 +1,11 @@
 import styles from './About.module.css';
 import headshot from '../../assets/headshot.jpeg';
-import { Helmet } from 'react-helmet';
+import { Metadata } from '../Metadata';
 
 const About = () => {
     return (
         <>
-            <Helmet>
-                <title>About</title>
-                <meta name="description" content="Bert Cherry (she/they) - NSCA Certified Strength & Conditioning Coach, USA Weightlifting Sport Performance Coach"/>
-            </Helmet>
+            <Metadata title="About" description="Bert Cherry (she/they) - NSCA Certified Strength & Conditioning Coach, USA Weightlifting Sport Performance Coach" type="website" creator="Bert Cherry" />
             <div className={styles.aboutDisplay}>
                 <h1>Bert Cherry (she/they)</h1>
                 <h2>NSCA Certified Strength & Conditioning Coach, USA Weightlifting Sport Performance Coach</h2> 

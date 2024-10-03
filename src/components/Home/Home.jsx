@@ -1,15 +1,12 @@
 import styles from './Home.module.css';
 import outdoors from '../../assets/Bert Outdoors.jpg';
-import { Helmet } from 'react-helmet';
+import { Metadata } from '../Metadata';
 
 const Home = () => {
 
     return (
         <>
-            <Helmet>
-                <title>Home</title>
-                <meta name="description" content="Cherry Coaching website, copyright Bert Cherry 2024."/>
-            </Helmet>
+            <Metadata title="Home" description="Cherry Coaching website, copyright Bert Cherry 2024." type="website" creator="Bert Cherry" />
             <div className={styles.homeDisplay}>
                 <div className={styles.imgContainer}>
                     <img src={outdoors} alt='Bert, a white person with colorful hair, stands outside holding a kettlebell and smiling in front of a group of people.'/>
