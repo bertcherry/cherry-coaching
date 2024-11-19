@@ -5,7 +5,7 @@ import About from './components/About/About';
 import Articles from './components/articles';
 import Article from './components/article';
 import Video from './components/Video/Video';
-import Videos from '.components/Video/Videos';
+import Videos from './components/Video/Videos';
 
 
 function App() {
