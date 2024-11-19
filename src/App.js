@@ -5,6 +5,7 @@ import About from './components/About/About';
 import Articles from './components/articles';
 import Article from './components/article';
 import Video from './components/Video/Video';
+import Videos from '.components/Video/Videos';
 
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
         <Route path='/articles' element={<Articles />} />
         <Route path='/articles/:id' element={<Article />} />
         <Route path='/videos/:id' element={<Video />} />
+        <Route path='/videos' element={<Videos />} />
       </Routes>
     </div> 
   );
