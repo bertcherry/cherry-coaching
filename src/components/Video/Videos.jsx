@@ -8,7 +8,7 @@ const Videos = () => {
 
     useEffect(() => {
         const getVideo = async () => {
-            const resp = await fetch(`/api/`);
+            const resp = await fetch(`/api/video/`);
             const videosResp = await resp.json();
             setData(videosResp);
         };
@@ -29,9 +29,9 @@ const Videos = () => {
     return (
         <>
             <Metadata title="Exercise Demos" description="Cherry Coaching Exercise Demos" creator="Bert Cherry"/>
-            <div className={styles.videoDisplay}>
+            <div className={styles.videosContainer}>
                 <h1>Exercise Demos</h1>
-                <ul>
+                <ul className={styles.videoList}>
                     {data.map(video => 
                         <Video key={video.id} video={video} />
                     )}
