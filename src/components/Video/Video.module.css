@@ -9,3 +9,18 @@
 .videoContainer {
     width: clamp(320px, 50%, 1080px);
 }
+
+.videosContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    max-width: 960px;
+    margin: 10px;
+}
+
+.videosList {
+    list-style-type: none;
+    display: flex;
+    gap: 20px;
+}
