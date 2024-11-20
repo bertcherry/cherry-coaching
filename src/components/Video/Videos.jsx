@@ -7,13 +7,13 @@ const Videos = () => {
     const [data, setData] = useState({});
 
     useEffect(() => {
-        const getVideo = async () => {
-            const resp = await fetch(`/api/video/`);
+        const getVideos = async () => {
+            const resp = await fetch(`/api`);
             const videosResp = await resp.json();
             setData(videosResp);
         };
 
-        getVideo();
+        getVideos();
     }, []);
 
     const Video = ({video}) => {
