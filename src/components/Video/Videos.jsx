@@ -8,7 +8,7 @@ const Videos = () => {
 
     useEffect(() => {
         const getVideos = async () => {
-            const resp = await fetch(`/api`);
+            const resp = await fetch(`/api/video/`);
             const videosResp = await resp.json();
             setData(videosResp);
         };
