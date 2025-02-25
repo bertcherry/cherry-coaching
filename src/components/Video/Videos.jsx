@@ -19,7 +19,7 @@ const Videos = () => {
     const Video = ({video}) => {
         return (
             <>
-                <li><Link to={`/video/${video.id}`}>{video.name}</Link></li>
+                <li><Link to={`/videos/${video.id}`}>{video.name}</Link></li>
             </>
         );
     }
