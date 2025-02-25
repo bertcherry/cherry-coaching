@@ -63,7 +63,7 @@ const Sitemap = async () => {
             parser: 'html',
         });
     
-        fs.writeFileSync('public/sitemap.xml', formatted);
+        fs.writeFileSync('build/sitemap.xml', formatted);
         console.log('Sitemap generated successfully.');
         } catch (error) {
         console.error('Error generating sitemap:', error);
