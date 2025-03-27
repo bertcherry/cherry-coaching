@@ -43,3 +43,33 @@ a {
 a:hover {
   text-decoration: underline;
 }
+
+nav {
+  align-self: center;
+  flex-shrink: 0;
+  padding-right: 20px;
+}
+
+.banner {
+  background-color: var(--black);
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  width: 100%;
+}
+
+.logo {
+  height: clamp(4rem, 10vh , 10rem);
+  width: auto;
+}
+
+.logo > img {
+  height: 100%;
+  width: auto;
+}
+
+.navList {
+  list-style-type: none;
+  display: flex;
+  gap: 20px;
+}

@@ -9,10 +9,12 @@
 
 .imgContainer {
     width: 75%;
+    height: auto;
 }
 
 .imgContainer > img {
     width: 100%;
+    height: auto;
 }
 
 .impact {
