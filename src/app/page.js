@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './Home.module.css';
-import outdoors from '../../assets/Bert Outdoors.jpg';
+import outdoors from '../assets/Bert Outdoors.jpg';
  
 export function generateStaticParams() {
   return [{ slug: [''] }]
