@@ -20,15 +20,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "npx serve@latest ./build",
-    "pages:dev": "wrangler pages dev --compatibility-date=2024-01-17 --port 3000 -- npm start",
-    "pages:deploy": "npm run build && wrangler pages deploy ./build",
+    "pages:build": "npx @cloudflare/next-on-pages",
+    "preview": "npm run pages:build && wrangler pages dev .vercel/output/static",
+    "devdb": "wrangler d1 execute videos --local --command --file=videos.sql",
     "updatedb": "wrangler d1 execute videoDB --file=videos.sql"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
   },
   "browserslist": {
     "production": [
@@ -43,6 +38,8 @@
     ]
   },
   "devDependencies": {
-    "wrangler": "^3.25.0"
+    "@cloudflare/next-on-pages": "^1.13.10",
+    "eslint-plugin-next-on-pages": "^1.13.10",
+    "wrangler": "^4.5.0"
   }
 }
