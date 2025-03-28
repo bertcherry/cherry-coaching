@@ -6,13 +6,13 @@
   "assets": [],
   "framework": {
     "slug": "nextjs",
-    "version": "15.2.4"
+    "version": "15.1.0"
   },
   "environment": {
-    "__NEXT_BUILD_ID": "cnppGIYRU6NSn7DCNttYS",
+    "__NEXT_BUILD_ID": "LkHS6fMzS2aZJ6cbrUTK0",
     "NEXT_SERVER_ACTIONS_ENCRYPTION_KEY": "iN4pg+Q7yR1UgJAgWsV8uZz9PgGzu8+J01YpPeLdgE4=",
-    "__NEXT_PREVIEW_MODE_ID": "72aa0390221b93ea6fb573dde0b888f2",
-    "__NEXT_PREVIEW_MODE_ENCRYPTION_KEY": "dc9ca28cf1028e8a5346c3a7b322fd8ae7961b4eb6939946d0fe0fc5412dc5e2",
-    "__NEXT_PREVIEW_MODE_SIGNING_KEY": "244c246f0b3e9f6beef8fd2648afb59f0d0fd9afb74637cb46414ebe4a396d4c"
+    "__NEXT_PREVIEW_MODE_ID": "1580c4dfca5c49772098061cf839c96f",
+    "__NEXT_PREVIEW_MODE_ENCRYPTION_KEY": "fe5cbb7d5db1dca5a4b8295bab2110e8d941ba686b5ef18ad0985bbeb7232cb0",
+    "__NEXT_PREVIEW_MODE_SIGNING_KEY": "6ead1dee8a26de36ef7d7ae62e1e3f063f7c2390142686664889f03d78902533"
   }
 }

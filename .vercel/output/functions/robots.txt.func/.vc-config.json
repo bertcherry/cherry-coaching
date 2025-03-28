@@ -1,10 +1,9 @@
 {
-  "operationType": "Page",
+  "operationType": "API",
   "handler": "___next_launcher.cjs",
   "runtime": "nodejs22.x",
   "environment": {},
   "supportsMultiPayloads": true,
-  "supportsResponseStreaming": true,
   "framework": {
     "slug": "nextjs",
     "version": "15.1.0"
@@ -653,12 +652,16 @@
     "node_modules/react-dom/cjs/react-dom-server.browser.development.js": "node_modules/react-dom/cjs/react-dom-server.browser.development.js",
     ".next/server/chunks/627.js": ".next/server/chunks/627.js",
     "node_modules/next/dist/pages/_document.js": "node_modules/next/dist/pages/_document.js",
-    ".next/server/chunks/767.js": ".next/server/chunks/767.js",
     ".next/server/chunks/638.js": ".next/server/chunks/638.js",
-    ".next/server/app/_not-found/page_client-reference-manifest.js": ".next/server/app/_not-found/page_client-reference-manifest.js",
-    ".next/server/app/_not-found/page.js": ".next/server/app/_not-found/page.js",
+    "node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js": "node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js",
+    ".next/server/chunks/452.js": ".next/server/chunks/452.js",
+    ".next/server/app/robots.txt/route.js": ".next/server/app/robots.txt/route.js",
+    ".next/server/app/favicon.ico/route.js": ".next/server/app/favicon.ico/route.js",
     ".next/server/pages/_app.js": ".next/server/pages/_app.js",
     ".next/server/pages/_error.js": ".next/server/pages/_error.js",
-    ".next/server/pages/_document.js": ".next/server/pages/_document.js"
+    ".next/server/pages/_document.js": ".next/server/pages/_document.js",
+    ".next/server/app/_not-found/page.js": ".next/server/app/_not-found/page.js",
+    ".next/server/chunks/767.js": ".next/server/chunks/767.js",
+    ".next/server/app/_not-found/page_client-reference-manifest.js": ".next/server/app/_not-found/page_client-reference-manifest.js"
   }
 }
