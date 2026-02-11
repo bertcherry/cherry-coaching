@@ -11,11 +11,11 @@ const About = () => {
     return (
         <>
             <div className={styles.aboutDisplay}>
-                <h1>Bert Cherry (she/they)</h1>
+                <h1>Bert Cherry (they/she)</h1>
                 <h2>NSCA Certified Strength & Conditioning Coach, USA Weightlifting Sport Performance Coach</h2> 
                 <div className={styles.flexContainer}>
                     <div className={styles.imgContainer}>
-                        <img src={headshot.src} alt='Bert, a white femme presenting person, stands in front of a blooming cherry tree.'/>
+                        <img src={headshot.src} alt='Bert, a white femme presenting personal trainer, stands in front of a blossoming cherry tree.'/>
                     </div>
                     <div className={styles.bioContainer}>
                         <div>I have over 10 years of experience helping people of all ages connect with their bodies to increase sport performance, develop resilience against injuries, and bridge the gap from physical therapy to full return to activities.</div>
