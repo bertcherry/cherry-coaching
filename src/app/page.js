@@ -64,7 +64,7 @@ export default function Page() {
                 <li>An approach that treats recovery and sustainability as seriously as the training itself.</li>
             </ul>
             <h3>What you won't find here:</h3>
-            <div>No diet culture, no shame, no cookie-cutter plans, and no drill sergeant energy. Movement isn't punishment, food isn't "bad," and you're a whole person, not just a set of fitness metrics.</div>
+            <div>No diet culture, no shame, no cookie-cutter plans, and no drill sergeant energy. Movement isn't punishment, food isn't "bad", and you're a whole person, not just a set of fitness metrics.</div>
             <h2>Ready to Get Started?</h2>
             <div>Fill out the interest form and I'll be in touch within 48 hours. Not sure which option is the right fit? We'll talk through it together.</div>
             <a className={styles.btn} href='https://docs.google.com/forms/d/e/1FAIpQLSemCFI-iCeKT35uLwsFK8yb3fAEyi4oUv151rJuMQkQ3mI8Lg/viewform?usp=sharing'>Fill Out the Interest Form</a>
