@@ -1,7 +1,7 @@
 {
   "type": "Prerender",
   "expiration": false,
-  "group": 2,
+  "group": 4,
   "bypassToken": "f991e239b7bddaf00fd2176e13675da9",
   "experimentalBypassFor": [
     {
@@ -17,13 +17,12 @@
   "fallback": {
     "type": "FileFsRef",
     "mode": 33188,
-    "fsPath": "about.rsc.prerender-fallback.rsc"
+    "fsPath": "services.prerender-fallback.html"
   },
   "initialHeaders": {
     "x-nextjs-stale-time": "4294967294",
     "x-nextjs-prerender": "1",
-    "x-next-cache-tags": "_N_T_/layout,_N_T_/about/layout,_N_T_/about/page,_N_T_/about",
-    "content-type": "text/x-component"
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/services/layout,_N_T_/services/page,_N_T_/services"
   },
   "allowQuery": [],
   "allowHeader": [
