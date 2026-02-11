@@ -1,0 +1,27 @@
+.servicesDisplay {   
+    max-width: 960px;
+    margin: 10px;
+}
+
+ul.noGap {
+    margin-top: 0;
+}
+
+.btn {
+    padding: 0.6em 1.2em;
+    border-radius: 8px;
+    border: 3px solid var(--peach);
+    color: var(--peach);
+    background-color: var(--black);
+    transition: border-color 0.25s;
+}
+.btn:hover {
+    text-decoration: underline;
+    color: var(--red);
+    border-color: var(--red);
+}
+.btn:focus,
+.btn:focus-visible {
+    outline: 3px solid var(--peach);
+    outline-offset: 3px;
+}
