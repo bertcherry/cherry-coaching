@@ -18,7 +18,7 @@ const About = () => {
                         <img src={headshot.src} alt='Bert, a white femme presenting person, stands in front of a blooming cherry tree.'/>
                     </div>
                     <div className={styles.bioContainer}>
-                        <div>I have nearly 10 years of experience helping people of all ages connect with their bodies to increase sport performance, develop resilience against injuries, and bridge the gap from physical therapy to full return to activities.</div>
+                        <div>I have over 10 years of experience helping people of all ages connect with their bodies to increase sport performance, develop resilience against injuries, and bridge the gap from physical therapy to full return to activities.</div>
                         <div>I'm experienced in the following training modalities and use a blended approach of all of the following according to client needs:</div>
                         <ul>
                             <li>Barbell strength training</li>
