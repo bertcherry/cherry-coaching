@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 import styles from './Home.module.css';
 import outdoors from '../assets/Bert Outdoors.jpg';
 
@@ -12,27 +13,61 @@ export const metadata = {
         template: '%s | Cherry Coaching',
         default: 'Cherry Coaching',
     },
-    description: 'Cherry Coaching website, copyright Bert Cherry 2025.'
+    description: 'Cherry Coaching website, copyright Bert Cherry 2026.'
 }
  
 export default function Page() {
   return (    
     <>
         <div className={styles.homeDisplay}>
+            <h1>Strength & conditioning coaching in Seattle, built around you.</h1>
+            <div>1:1 training sessions and custom programming for people who want to move better, perform at their best, and build a lasting relationship with their body. In-person and virtual.</div>
             <div className={styles.imgContainer}>
-                <img src={outdoors.src} alt='Bert, a white person with colorful hair, stands outside holding a kettlebell and smiling in front of a group of people.'/>
-                <div className={styles.impact}>Personalized strength & conditioning coaching and programming for people who want support in reaching their goals.</div>
+                <img src={outdoors.src} alt='Bert, a white S&C coach with colorful hair, stands outside holding a kettlebell and smiling in front of a group of people.'/>
+                <div className={styles.impact}>NSCA Certified Strength & Conditioning Specialist | 10+ Years Experience</div>
             </div>
-            <h2>What It Is</h2>
-            <div>Individual guidance, deliberate connection, and compassion. Finding the heart of your motivation and understanding how your history informs your movement patterns to design a plan that works for you.</div>
-            <div>We’ll build a relationship over time that informs our work together. We’ll adapt and change as your life does to make sure we’re always connected with your goals.</div>
-            <h2>What it's Not</h2>
-            <div>Diet culture, shame, guilt trips, or cookie cutter workouts.</div>
-            <div>I’m not interested in being a glorified rep counter or your drill sergeant. I don’t go for narratives about movement as punishment or calling certain foods “bad”. I’m here to support you as a whole human. We acknowledge that all stress is stress, including exercise!</div>
-            <h2>Availability & Rates</h2>
-            <div>I currently offer in-person and virtual 1:1 coaching sessions. In-person sessions take place at one of the Rain City Fit locations on Cap Hill and SoDo or at sport fields throughout the CD and Cap Hill. Virtual sessions use a suitable platform such as Google Meet or FaceTime.</div>
-            <div>Services are offered on a <a href='https://docs.google.com/document/d/1x4m2mbG5s-C7Ns5vZETRU3ZO--vL6rbeWUiyKBZyeGE/edit?usp=sharing'>flexible pricing structure</a> with rates ranging from $90-130 per hour-long session payed via Venmo, PayPal, or cash.</div>
-            <a className={styles.btn} href='https://docs.google.com/forms/d/e/1FAIpQLSemCFI-iCeKT35uLwsFK8yb3fAEyi4oUv151rJuMQkQ3mI8Lg/viewform?usp=sharing'>Interest Form</a>
+            <a className={styles.btn} href='https://docs.google.com/forms/d/e/1FAIpQLSemCFI-iCeKT35uLwsFK8yb3fAEyi4oUv151rJuMQkQ3mI8Lg/viewform?usp=sharing'>Get in Touch</a>
+            <h2>Coaching that Goes Deeper Than Reps and Sets</h2>
+            <div>Whether you want a coach in your corner every session or a precision-built program to run on your own, every decision starts with understanding you: your history, your goals, how your body moves, and what your life actually looks like right now. We build from there, and we keep building together as things change.</div>
+            <h2><Link href='services' style={{color: 'var(--light-peach)'}}>Two Ways to Work Together</Link></h2>
+            <div>Choose the format that fits your life, or combine both.</div>
+            <div className={styles.cards}>
+                <Link href='/services#training' className={styles.card}>
+                    <h3>1:1 Training Sessions</h3>
+                    <div>Work side by side with a coach who's fully focused on you.</div>
+                    <ul>
+                        <li>In-person at Rain City Fit on Cap Hill or sports fields around Seattle</li>
+                        <li>Virtual via FaceTime, Google Meet, or your preferred platform</li>
+                        <li>60 minutes; sliding scale $90-130 per session</li>
+                        <li>Hands-on cueing, real-time adjustments, ongoing coaching relationship</li>
+                    </ul>
+                </Link>
+                <Link href='/services#programming' className={styles.card}>
+                    <h3>Custom Programming</h3>
+                    <div>A program built for your body, to train on your own schedule.</div>
+                    <ul>
+                        <li>Starts with 1-4 in-person assessment sessions, $90-130 each</li>
+                        <li>Monthly Plans from $180-260, per workout from $30-40</li>
+                        <li>Tailored to your goals, history, and available equipment</li>
+                        <li>Ideal if you want expert-level coaching without a fixed weekly schedule</li>
+                    </ul>
+                </Link>
+            </div>
+            <div>Rates are offered on a sliding scale based on financial access. I want cost to be as little a barrier as possible. We'll sort out the right rate together when you get in touch.</div>
+            <h2>A Different Kind of Training Relationship</h2>
+            <h3>What you can expect:</h3>
+            <ul style={{marginTop: '0'}}>
+                <li>Programming designed for your body, your goals, and your life. Not a template.</li>
+                <li>A coach who pays attention to how stress, past injuries, and your nervous system affect how you move and recover.</li>
+                <li>Real, ongoing connection that adapts as your life does.</li>
+                <li>Attention to the nuanced wins: moving pain-free, making a surprising play in sports, finally feeling an exercise work exactly where it should.</li>
+                <li>An approach that treats recovery and sustainability as seriously as the training itself.</li>
+            </ul>
+            <h3>What you won't find here:</h3>
+            <div>No diet culture, no shame, no cookie-cutter plans, and no drill sergeant energy. Movement isn't punishment, food isn't "bad," and you're a whole person, not just a set of fitness metrics.</div>
+            <h2>Ready to Get Started?</h2>
+            <div>Fill out the interest form and I'll be in touch within 48 hours. Not sure which option is the right fit? We'll talk through it together.</div>
+            <a className={styles.btn} href='https://docs.google.com/forms/d/e/1FAIpQLSemCFI-iCeKT35uLwsFK8yb3fAEyi4oUv151rJuMQkQ3mI8Lg/viewform?usp=sharing'>Fill Out the Interest Form</a>
         </div>
     </>
 )

@@ -21,6 +21,7 @@
     font-style: italic;
     font-size: 1.2rem;
     font-weight: 600;
+    text-align: center;
 }
 
 .btn {
@@ -38,6 +39,37 @@
 }
 .btn:focus,
 .btn:focus-visible {
+    outline: 3px solid var(--peach);
+    outline-offset: 3px;
+}
+
+.cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 75%;
+}
+a.card {
+    flex: 1 0 250px;
+    margin: 20px;
+    padding: 0.6em 1.2em;
+    border-radius: 8px;
+    border: 3px solid var(--peach);
+    background-color: var(--black);
+    color: var(--light-peach);
+    transition: border-color 0.25s;
+}
+a.card:hover {
+    color: var(--light-peach);
+    text-decoration: none;
+    border-color: var(--red);
+}
+a.card:hover > h3 {
+    color: var(--red);
+    text-decoration: underline;
+}
+a.card:focus,
+a.card:focus-visible {
     outline: 3px solid var(--peach);
     outline-offset: 3px;
 }
