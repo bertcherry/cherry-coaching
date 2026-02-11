@@ -79,5 +79,28 @@ h1 {
 }
 
 h2 {
+  text-align: center;
   padding-top: 30px;
+}
+
+table {
+  border-collapse: collapse;
+  border-radius: 3px;
+  border: 3px solid var(--peach);
+  margin: 10px;
+}
+
+th, 
+td {
+  padding: 0.6em;
+  border: 1px solid var(--peach);
+}
+
+caption {
+  position: absolute;
+  left: -100000px;
+  width: 1px;
+  height: 1px;
+  top: auto;
+  overflow: hidden;
 }
