@@ -36,7 +36,7 @@ export default function Page() {
                     <h3>1:1 Training Sessions</h3>
                     <div>Work side by side with a coach who's fully focused on you.</div>
                     <ul>
-                        <li>In-person at my 1:1 studio near Judkins Park, at Rain City Fit on Cap Hill, or sports fields around central Seattle</li>
+                        <li>In-person at my 1:1 studio near Jimi Hendrix Park, at Rain City Fit on Cap Hill, or sports fields around central Seattle</li>
                         <li>Virtual via FaceTime, Google Meet, or your preferred platform</li>
                         <li>60 minutes; sliding scale $90-130 per session</li>
                         <li>Hands-on cueing, real-time adjustments, ongoing coaching relationship</li>
