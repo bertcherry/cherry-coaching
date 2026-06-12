@@ -11,9 +11,9 @@ const Services = () => {
         <>
             <div className={styles.servicesDisplay}>
                 <h1 >1:1 Training Sessions & Custom Programming in Seattle</h1>
-                <div>Two ways to work together, one consistent approach: everything built around how you actually move, where you're trying to go, and what your life looks like right now.</div> 
+                <div>Two ways to work together, one consistent approach. Everything is built around how you actually move, where you're trying to go, and what your life looks like right now.</div> 
                 <h2 id='training'>1:1 Training Sessions</h2>
-                <div>This is hands-on coaching: you and me, working through every session together. I'm watching how you move, adjusting in real time, and building a picture of your body over time that informs everything we do.</div>
+                <div>This is hands-on coaching where we work through every session together. I'm watching how you move, adjusting in real time, and building a picture of your body over time that informs everything we do.</div>
                 <div>Sessions are fully individual. No group classes, no split attention. Every minute is focused on you.</div>
                 <h3>How it works:</h3>
                 <ul className={styles.noGap}>
@@ -32,7 +32,7 @@ const Services = () => {
                 </ul>
                 <h3>Locations:</h3>
                 <ul className={styles.noGap}>
-                    <li>In-person: Rain City Fit, Capitol Hill, or sport fields throughout the Seattle</li>
+                    <li>In-person: 1:1 studio near Jimi Hendrix Park, Rain City Fit on Capitol Hill, or sport fields throughout central Seattle</li>
                     <li>Virtual: FaceTime, Google Meet, or your preferred platform</li>
                 </ul>
                 <h3>60 minute session rates:</h3>
@@ -59,7 +59,7 @@ const Services = () => {
 
                 <h2 id='programming'>Custom Programming</h2>
                 <div>Want expert-level programming you can take to the gym on your own schedule? Custom programming gives you a precision-built training plan designed around exactly how your body moves and what you're working toward.</div>
-                <div>I don't write programs for people I haven't worked with in person. Before I put a plan together, I need to see you move, to understand your patterns, your history, and where the opportunities are. That's what makes the programming actually work.</div>
+                <div>I don't write programs for people I haven't worked with in person. Before I put a plan together, I need to see you move, to understand your patterns, and your history so I can appropriately tailor the programming to you.</div>
                 <h3>How it works:</h3>
                 <ul className={styles.noGap}>
                     <li>We start with 2–4 in-person assessment sessions so I can see how you move before writing your plan.</li>
