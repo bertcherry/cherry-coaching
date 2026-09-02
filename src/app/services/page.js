@@ -124,8 +124,8 @@ const Services = () => {
                     <li>People who've felt dismissed or underserved by other approaches and want something more thoughtful</li>
                     <li>All experience levels, from true beginners to competitive athletes</li>
                 </ul>
-                <div style={{textAlign: 'center', paddingTop: '20px'}}>                
-                    <a className={styles.btn} href='https://docs.google.com/forms/d/e/1FAIpQLSemCFI-iCeKT35uLwsFK8yb3fAEyi4oUv151rJuMQkQ3mI8Lg/viewform?usp=sharing'>Fill Out the Interest Form</a>
+                <div style={{textAlign: 'center', paddingTop: '20px'}}>
+                    <a className={styles.btn} href='/interest'>Fill Out the Interest Form</a>
                 </div>
             </div>
         </>

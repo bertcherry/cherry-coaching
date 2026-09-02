@@ -8,3 +8,10 @@ binding = 'videoDB'
 database_name = 'videos'
 database_id = 'e4f459c8-cfc2-4ba0-8f67-1d7bea98d088'
 preview_database_id = 'videoDB'
+
+# Site data (interest form submissions, etc)
+[[d1_databases]]
+binding = 'siteDB'
+database_name = 'cherry-coaching'
+database_id = '7bf74309-5019-488a-b20b-84012674ce9e'
+preview_database_id = 'siteDB'

@@ -23,7 +23,9 @@
     "pages:build": "npx @cloudflare/next-on-pages",
     "preview": "npm run pages:build && wrangler pages dev .vercel/output/static",
     "devdb": "wrangler d1 execute videos --local --command --file=videos.sql",
-    "updatedb": "wrangler d1 execute videoDB --file=videos.sql"
+    "updatedb": "wrangler d1 execute videoDB --file=videos.sql",
+    "sitedb:local": "wrangler d1 execute cherry-coaching --local --file=interest_submissions.sql",
+    "sitedb:remote": "wrangler d1 execute cherry-coaching --remote --file=interest_submissions.sql"
   },
   "browserslist": {
     "production": [

@@ -1,0 +1,278 @@
+.wrap {
+    width: 100%;
+    /* calc keeps the form inside the viewport even though the site's
+       shared header can overflow its container on narrow screens */
+    max-width: min(740px, calc(100vw - 40px));
+    margin: 10px 0;
+    padding: 0 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.wrap,
+.wrap *,
+.wrap *::before,
+.wrap *::after {
+    box-sizing: border-box;
+}
+
+.intro {
+    margin: 0;
+}
+
+.section {
+    border: 3px solid var(--peach);
+    border-radius: 8px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.section > legend {
+    font-weight: 700;
+    font-size: 1.15rem;
+    padding: 0 8px;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.field > label {
+    font-weight: 600;
+}
+
+.help {
+    font-size: 0.9rem;
+    font-style: italic;
+    opacity: 0.85;
+}
+
+.field input[type='text'],
+.field input[type='email'],
+.field input[type='tel'],
+.field textarea,
+.wrap input[type='text'],
+.wrap input[type='email'],
+.wrap input[type='tel'],
+.wrap textarea {
+    font: inherit;
+    color: var(--light-peach);
+    background-color: var(--black);
+    border: 1.5px solid var(--peach);
+    border-radius: 6px;
+    padding: 0.5em;
+    width: 100%;
+}
+
+.wrap textarea {
+    resize: vertical;
+}
+
+.wrap input:focus,
+.wrap textarea:focus,
+.wrap summary:focus,
+.btn:focus,
+.wrap input:focus-visible,
+.wrap textarea:focus-visible {
+    outline: 3px solid var(--peach);
+    outline-offset: 2px;
+}
+
+.choice {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 400;
+    line-height: 1.4;
+    min-height: 1.9em;
+}
+
+.choice input[type='radio'],
+.choice input[type='checkbox'] {
+    flex-shrink: 0;
+    width: 1.1em;
+    height: 1.1em;
+    accent-color: var(--peach);
+}
+
+/* Inline "Other:" text box — sized to sit on the same line height as the
+   plain radio/checkbox rows, with a lighter border than the section. */
+.otherInput.otherInput {
+    flex: 1;
+    min-width: 0;
+    width: auto;
+    padding: 0.1em 0.4em;
+    border-width: 1px;
+    border-radius: 4px;
+}
+
+.policy {
+    border: 1.5px solid var(--peach);
+    border-radius: 6px;
+    padding: 12px 16px;
+}
+
+.policy > summary {
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.policy[open] > summary {
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--peach);
+}
+
+.policyBody {
+    max-height: 200px;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+.policyBody:focus,
+.policyBody:focus-visible {
+    outline: 2px solid var(--peach);
+    outline-offset: 2px;
+}
+
+.policyEnd {
+    text-align: center;
+    font-weight: 700;
+    opacity: 0.7;
+    margin-bottom: 0;
+}
+
+.policy h3 {
+    font-size: 1rem;
+    margin: 0 0 12px;
+}
+
+.policy p,
+.policy li {
+    font-size: 0.92rem;
+    line-height: 1.5;
+}
+
+.policy ul {
+    margin: 0;
+    padding-left: 1.2em;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* Rate breakdown pop-out */
+.ratePanel {
+    border: 1.5px solid var(--peach);
+    border-radius: 6px;
+    padding: 12px 16px;
+}
+
+.ratePanel > summary {
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.rateScroll {
+    overflow-x: auto;
+    margin-top: 12px;
+    -webkit-overflow-scrolling: touch;
+}
+
+.rateTable {
+    border-collapse: collapse;
+    border: 1.5px solid var(--peach);
+    border-radius: 3px;
+    margin: 0;
+    min-width: 260px;
+    width: 100%;
+    font-size: 0.82rem;
+}
+
+.rateTable th,
+.rateTable td {
+    border: 1px solid var(--peach);
+    padding: 0.4em 0.5em;
+    text-align: center;
+}
+
+.rateTable thead th {
+    font-size: 0.8rem;
+}
+
+.rateTable tbody th {
+    text-align: left;
+    font-weight: 600;
+}
+
+.rateNote {
+    margin: 10px 0 0;
+    font-size: 0.85rem;
+    font-style: italic;
+    opacity: 0.85;
+}
+
+.choiceDisabled {
+    opacity: 0.55;
+}
+
+.error {
+    color: var(--red);
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.hasError {
+    border-color: var(--red);
+}
+
+.hasError > legend,
+.hasError > label {
+    color: var(--red);
+}
+
+.formError {
+    border: 3px solid var(--red);
+    border-radius: 8px;
+    padding: 16px;
+    color: var(--red);
+    font-weight: 600;
+}
+
+.btn {
+    align-self: flex-start;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0.6em 1.6em;
+    border-radius: 8px;
+    border: 3px solid var(--peach);
+    color: var(--peach);
+    background-color: var(--black);
+    transition: border-color 0.25s;
+}
+
+.btn:hover {
+    text-decoration: underline;
+    color: var(--red);
+    border-color: var(--red);
+}
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: progress;
+}
+
+/* Honeypot */
+.hp {
+    position: absolute;
+    left: -100000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
