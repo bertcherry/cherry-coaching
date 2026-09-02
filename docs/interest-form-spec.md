@@ -24,6 +24,12 @@ New files:
 - **Locations**: "Other:" is now a checkbox selectable *alongside* the fixed options
   (multi-select), with its own text field. Copy updated to Bert's wording
   ("In-person gym, private studio near Jimi Hendrix Park", etc.).
+- **"Other" text fields** (locations, referral, rate): required when the option is chosen —
+  enforced client-side *and* server-side (a bare `"Other:"` is rejected). Selecting the Other
+  radio/checkbox moves the cursor into its text field; leaving it empty on blur shows inline
+  helper text, which clears once they type or pick another option.
+- **Healthcare-provider follow-up** ("who are they, what do they see you for?") renders
+  directly beneath that radio option, indented, not at the bottom of the list.
 - **Rates**: a "See all rates" pop-out (`<details>`) holds one condensed table of every
   rate across all three tiers, in a horizontal-scroll wrapper, sized to stay legible down
   to ~260px wide (row labels wrap rather than force scroll).
@@ -49,9 +55,10 @@ Helper text explains the gate; an "— End —" marker sits at the bottom of eac
 Order in `route.js`:
 1. Insert the submission into D1 — source of truth. Failure here → HTTP 500, user sees an error.
 2. Email Bert the submission, **retrying up to 3× with backoff**. The row's `notify_status`
-   column is set to `sent` or `failed`.
+   column is set to `sent` or `failed`. **A missing `RESEND_API_KEY` also counts as `failed`**
+   — a misconfigured deployment must not silently swallow submissions.
 3. Email the submitter their confirmation — this one *is* best-effort.
-4. Response is `{ ok: true, notifyFailed: <bool> }`.
+4. Response is `{ ok: true, notifyFailed: <bool> }` where `notifyFailed` is simply `!notified`.
 
 If the notification ultimately fails, the form's success screen changes: instead of "expect a
 reply in 48 hours" it tells the person their submission was saved but there was a problem

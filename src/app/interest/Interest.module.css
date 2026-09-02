@@ -221,6 +221,13 @@
     opacity: 0.55;
 }
 
+/* Follow-up question shown directly under the option that triggers it */
+.subField {
+    margin-left: calc(1.1em + 10px);
+    padding-left: 12px;
+    border-left: 2px solid var(--peach);
+}
+
 .error {
     color: var(--red);
     font-size: 0.9rem;

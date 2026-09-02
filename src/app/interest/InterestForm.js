@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import Link from 'next/link';
 import styles from './Interest.module.css';
 import AgreementPanel from './AgreementPanel';
@@ -20,6 +20,13 @@ import {
 
 const OTHER = 'Other';
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+// Message shown when an "Other" option is chosen but its text field is blank.
+const OTHER_MSG = {
+    referralOther: 'Please specify how you heard about me.',
+    rateOther: 'Please specify the rate that fits your situation.',
+    locationOther: 'Please specify your other location.',
+};
 
 const emptyForm = {
     fullName: '',
@@ -52,7 +59,31 @@ const InterestForm = () => {
     const [status, setStatus] = useState('idle'); // idle | submitting | success | error
     const [notifyFailed, setNotifyFailed] = useState(false);
 
+    const referralOtherRef = useRef(null);
+    const rateOtherRef = useRef(null);
+    const locationOtherRef = useRef(null);
+
     const set = (name, value) => setForm((f) => ({ ...f, [name]: value }));
+
+    const clearErr = (name) =>
+        setErrors((prev) => {
+            if (!prev[name]) return prev;
+            const next = { ...prev };
+            delete next[name];
+            return next;
+        });
+
+    // Inline validation for an "Other" text field, run on blur (form best practice:
+    // don't flag the field until the person leaves it empty).
+    const blurOther = (name, isActive, value) => {
+        if (isActive && !value.trim()) {
+            setErrors((prev) => ({ ...prev, [name]: OTHER_MSG[name] }));
+        } else {
+            clearErr(name);
+        }
+    };
+
+    const focusSoon = (ref) => requestAnimationFrame(() => ref.current?.focus());
 
     const toggleLocation = (value) => {
         setForm((f) => ({
@@ -72,7 +103,7 @@ const InterestForm = () => {
         if (form.locations.length === 0 && !(form.locationOtherChecked && form.locationOther.trim()))
             e.locations = 'Please choose at least one location.';
         else if (form.locationOtherChecked && !form.locationOther.trim())
-            e.locationOther = 'Please fill in your other location.';
+            e.locationOther = OTHER_MSG.locationOther;
         if (!form.goals.trim()) e.goals = 'Please tell me what you’re looking for.';
         if (!form.injuries.trim())
             e.injuries = 'Please answer this — write "none" if that’s the case.';
@@ -80,10 +111,10 @@ const InterestForm = () => {
         if (!form.frequency.trim()) e.frequency = 'Please share how often you’d like to meet.';
         if (!form.referralSource) e.referralSource = 'Please choose one.';
         else if (form.referralSource === OTHER && !form.referralOther.trim())
-            e.referralOther = 'Please fill this in.';
+            e.referralOther = OTHER_MSG.referralOther;
         if (!form.rateTier) e.rateTier = 'Please choose a rate.';
         else if (form.rateTier === OTHER && !form.rateOther.trim())
-            e.rateOther = 'Please fill this in.';
+            e.rateOther = OTHER_MSG.rateOther;
         if (!form.paymentMethod) e.paymentMethod = 'Please choose one.';
         if (!form.agreedCancellation)
             e.agreedCancellation = 'You must agree to the cancellation policy to continue.';
@@ -301,7 +332,9 @@ const InterestForm = () => {
             </fieldset>
 
             <fieldset
-                className={`${styles.section} ${errors.locations ? styles.hasError : ''}`}
+                className={`${styles.section} ${
+                    errors.locations || errors.locationOther ? styles.hasError : ''
+                }`}
             >
                 <legend>At which location(s) are you interested in coaching? *</legend>
                 {LOCATION_OPTIONS.map((opt) => (
@@ -318,16 +351,33 @@ const InterestForm = () => {
                     <input
                         type="checkbox"
                         checked={form.locationOtherChecked}
-                        onChange={(e) => set('locationOtherChecked', e.target.checked)}
+                        onChange={(e) => {
+                            set('locationOtherChecked', e.target.checked);
+                            if (e.target.checked) focusSoon(locationOtherRef);
+                            else clearErr('locationOther');
+                        }}
                     />
                     <span>Other:</span>
                     <input
+                        ref={locationOtherRef}
                         type="text"
                         className={styles.otherInput}
                         value={form.locationOther}
-                        onChange={(e) => set('locationOther', e.target.value)}
+                        onChange={(e) => {
+                            set('locationOther', e.target.value);
+                            if (e.target.value.trim()) clearErr('locationOther');
+                        }}
                         onFocus={() => set('locationOtherChecked', true)}
+                        onBlur={() =>
+                            blurOther(
+                                'locationOther',
+                                form.locationOtherChecked,
+                                form.locationOther
+                            )
+                        }
                         aria-label="Other location"
+                        aria-invalid={invalid('locationOther')}
+                        aria-describedby={describedBy('locationOther')}
                     />
                 </label>
                 {err('locations')}
@@ -417,20 +467,47 @@ const InterestForm = () => {
             </fieldset>
 
             <fieldset
-                className={`${styles.section} ${errors.referralSource ? styles.hasError : ''}`}
+                className={`${styles.section} ${
+                    errors.referralSource || errors.referralOther ? styles.hasError : ''
+                }`}
             >
                 <legend>How did you hear about me? *</legend>
                 {REFERRAL_OPTIONS.map((opt) => (
-                    <label key={opt} className={styles.choice}>
-                        <input
-                            type="radio"
-                            name="referralSource"
-                            value={opt}
-                            checked={form.referralSource === opt}
-                            onChange={(e) => set('referralSource', e.target.value)}
-                        />
-                        {opt}
-                    </label>
+                    <React.Fragment key={opt}>
+                        <label className={styles.choice}>
+                            <input
+                                type="radio"
+                                name="referralSource"
+                                value={opt}
+                                checked={form.referralSource === opt}
+                                onChange={(e) => {
+                                    set('referralSource', e.target.value);
+                                    clearErr('referralOther');
+                                }}
+                            />
+                            {opt}
+                        </label>
+                        {opt === REFERRAL_PROVIDER_TRIGGER &&
+                            form.referralSource === REFERRAL_PROVIDER_TRIGGER && (
+                                <div className={`${styles.field} ${styles.subField}`}>
+                                    <label htmlFor="referralProvider">
+                                        Who are they, and what do they see you for?
+                                    </label>
+                                    <span className={styles.help}>
+                                        With your okay, I like to coordinate with practitioners
+                                        on your care.
+                                    </span>
+                                    <textarea
+                                        id="referralProvider"
+                                        rows={2}
+                                        value={form.referralProvider}
+                                        onChange={(e) =>
+                                            set('referralProvider', e.target.value)
+                                        }
+                                    />
+                                </div>
+                            )}
+                    </React.Fragment>
                 ))}
                 <label className={styles.choice}>
                     <input
@@ -438,41 +515,42 @@ const InterestForm = () => {
                         name="referralSource"
                         value={OTHER}
                         checked={form.referralSource === OTHER}
-                        onChange={(e) => set('referralSource', e.target.value)}
+                        onChange={(e) => {
+                            set('referralSource', e.target.value);
+                            focusSoon(referralOtherRef);
+                        }}
                     />
                     <span>Other:</span>
                     <input
+                        ref={referralOtherRef}
                         type="text"
                         className={styles.otherInput}
                         value={form.referralOther}
-                        onChange={(e) => set('referralOther', e.target.value)}
+                        onChange={(e) => {
+                            set('referralOther', e.target.value);
+                            if (e.target.value.trim()) clearErr('referralOther');
+                        }}
                         onFocus={() => set('referralSource', OTHER)}
+                        onBlur={() =>
+                            blurOther(
+                                'referralOther',
+                                form.referralSource === OTHER,
+                                form.referralOther
+                            )
+                        }
                         aria-label="Other source"
+                        aria-invalid={invalid('referralOther')}
+                        aria-describedby={describedBy('referralOther')}
                     />
                 </label>
                 {err('referralSource')}
                 {err('referralOther')}
-
-                {form.referralSource === REFERRAL_PROVIDER_TRIGGER && (
-                    <div className={styles.field}>
-                        <label htmlFor="referralProvider">
-                            Who are they, and what do they see you for?
-                        </label>
-                        <span className={styles.help}>
-                            With your okay, I like to coordinate with practitioners on your care.
-                        </span>
-                        <textarea
-                            id="referralProvider"
-                            rows={2}
-                            value={form.referralProvider}
-                            onChange={(e) => set('referralProvider', e.target.value)}
-                        />
-                    </div>
-                )}
             </fieldset>
 
             <fieldset
-                className={`${styles.section} ${errors.rateTier ? styles.hasError : ''}`}
+                className={`${styles.section} ${
+                    errors.rateTier || errors.rateOther ? styles.hasError : ''
+                }`}
             >
                 <legend>Which rate fits your situation? *</legend>
                 <span className={styles.help}>
@@ -521,7 +599,10 @@ const InterestForm = () => {
                             name="rateTier"
                             value={opt}
                             checked={form.rateTier === opt}
-                            onChange={(e) => set('rateTier', e.target.value)}
+                            onChange={(e) => {
+                                set('rateTier', e.target.value);
+                                clearErr('rateOther');
+                            }}
                         />
                         {opt}
                     </label>
@@ -532,16 +613,28 @@ const InterestForm = () => {
                         name="rateTier"
                         value={OTHER}
                         checked={form.rateTier === OTHER}
-                        onChange={(e) => set('rateTier', e.target.value)}
+                        onChange={(e) => {
+                            set('rateTier', e.target.value);
+                            focusSoon(rateOtherRef);
+                        }}
                     />
                     <span>Other:</span>
                     <input
+                        ref={rateOtherRef}
                         type="text"
                         className={styles.otherInput}
                         value={form.rateOther}
-                        onChange={(e) => set('rateOther', e.target.value)}
+                        onChange={(e) => {
+                            set('rateOther', e.target.value);
+                            if (e.target.value.trim()) clearErr('rateOther');
+                        }}
                         onFocus={() => set('rateTier', OTHER)}
+                        onBlur={() =>
+                            blurOther('rateOther', form.rateTier === OTHER, form.rateOther)
+                        }
                         aria-label="Other rate"
+                        aria-invalid={invalid('rateOther')}
+                        aria-describedby={describedBy('rateOther')}
                     />
                 </label>
                 {err('rateTier')}

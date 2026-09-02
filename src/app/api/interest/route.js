@@ -25,7 +25,10 @@ function validate(body) {
         phone: clamp(body.phone),
         serviceType: clamp(body.serviceType),
         locations: Array.isArray(body.locations)
-            ? body.locations.map(clamp).filter(Boolean).slice(0, 12)
+            ? body.locations
+                  .map(clamp)
+                  .filter((v) => v && !/^other:\s*$/i.test(v)) // drop a blank "Other:"
+                  .slice(0, 12)
             : [],
         goals: clamp(body.goals),
         injuries: clamp(body.injuries),
@@ -50,7 +53,11 @@ function validate(body) {
     if (!f.availability) errors.availability = 'Please share your availability.';
     if (!f.frequency) errors.frequency = 'Please share how often you’d like to meet.';
     if (!f.referralSource) errors.referralSource = 'Please choose one.';
+    else if (/^other:\s*$/i.test(f.referralSource))
+        errors.referralOther = 'Please specify how you heard about me.';
     if (!f.rateTier) errors.rateTier = 'Please choose a rate.';
+    else if (/^other:\s*$/i.test(f.rateTier))
+        errors.rateOther = 'Please specify the rate that fits your situation.';
     if (!f.paymentMethod) errors.paymentMethod = 'Please choose one.';
     if (!f.agreedCancellation)
         errors.agreedCancellation = 'You must agree to the cancellation policy.';
@@ -210,22 +217,24 @@ export async function POST(request) {
     }
 
     // 2. Notify Bert. Retry a few times; record the outcome on the row.
+    // A missing API key counts as a failure — Bert still needs to find out.
     const apiKey = env.RESEND_API_KEY;
     let notified = false;
     if (apiKey) {
         notified = await sendNotification(apiKey, f);
-        if (id != null) {
-            try {
-                await env.siteDB
-                    .prepare(`UPDATE interest_submissions SET notify_status = ? WHERE id = ?`)
-                    .bind(notified ? 'sent' : 'failed', id)
-                    .run();
-            } catch (err) {
-                console.error('notify_status update failed', err);
-            }
-        }
     } else {
-        console.warn('RESEND_API_KEY not set — skipping emails');
+        console.error('RESEND_API_KEY is not set for this deployment — cannot notify Bert');
+    }
+
+    if (id != null) {
+        try {
+            await env.siteDB
+                .prepare(`UPDATE interest_submissions SET notify_status = ? WHERE id = ?`)
+                .bind(notified ? 'sent' : 'failed', id)
+                .run();
+        } catch (err) {
+            console.error('notify_status update failed', err);
+        }
     }
 
     // 3. Confirmation to the submitter — best effort, don't block on it.
@@ -245,5 +254,5 @@ export async function POST(request) {
 
     // The submission is saved either way. `notifyFailed` tells the form to ask the
     // person to also reach out directly so Bert is sure to see it.
-    return Response.json({ ok: true, notifyFailed: apiKey ? !notified : false });
+    return Response.json({ ok: true, notifyFailed: !notified });
 }
