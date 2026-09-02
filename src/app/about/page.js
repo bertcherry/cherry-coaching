@@ -20,12 +20,11 @@ const About = () => {
                     </div>
                     <div className={styles.bioContainer}>
                         <h2>Why I Coach the Way I Do</h2>
-                        <div>I came into this work because I believe in there is nothing more empowering than connecting with our bodies.</div>
-                        <div>Over the past decade, I've worked with people at all stages: athletes returning from injury, beginners finding their footing, and everyone in between. My work spans sport performance, fitness for daily life and healthy aging, and bridging the gap from physical therapy back to full activity. The through-line across all of it is a deeply individual approach.</div>
-                        <div>I'm trained to look at movement through the lens of the nervous system: how stress, past injuries, and life history all shape the way we move and respond. That means I'm never just looking at what's happening in the gym; I'm looking at the full picture of you.</div>
-                        <h3>The Movements That Drive This Work</h3>
-                        <div>What lights me up isn't just hitting a PR. It's when a client notices they got through an activity pain-free for the first time. When someone makes a surprising play in their sport. When a client finally feels an exercise working exactly where it should, and their face changes because they get it now.</div>
-                        <div>I spend a lot of time in sessions asking people to tune into their experience and really feel what's happening in their bodies. That awareness, built over time, is one of the most valuable things you can take away from our work together, whether we're training side by side or I'm writing your program.</div>
+                        <div>I came into this work because I believe there is nothing more empowering than connecting with our bodies.</div>
+                        <div>Over the past decade, I've worked with people at all stages, from athletes returning from injury to beginners finding their footing. My work spans sport performance, fitness for daily life and healthy aging, and bridging the gap from physical therapy back to full activity.</div>
+                        <div>I look at movement through the lens of the nervous system. I consider how stress, past injuries, and life history all shape the way you move and respond. That means I'm never just looking at what's happening in the gym, I'm looking at the full picture of you.</div>
+                        <div>What lights me up isn't just a client hitting a PR. I love it when a client gets through an activity pain-free again or feels an exercise in the right spot.</div>
+                        <div>I spend a lot of time in sessions asking people to tune into their experience and really feel what's happening in their bodies. Building body awareness is one of the most valuable things clients take away from our work together, whether we're training side by side or I'm writing their program.</div>
                         <div>If deepening your relationship with your own body sounds like something you want, this coaching relationship is worth exploring.</div>
                         <h3>Credentials</h3>
                         <ul>
@@ -40,7 +39,8 @@ const About = () => {
                             <li>Olympic Weightlifting</li>
                             <li>Kettlebells for strength, power, endurance, and mobility</li>
                             <li>Mobility work including passive, active, and weighted approaches</li>
-                            <li>Speed and agility technique for field sports</li>
+                            <li>Speed and agility technique for field and court sports</li>
+                            <li>Fall risk reduction progressions for aging clients</li>
                         </ul>
                         <div style={{padding: '20px'}}>                        
                             <Link href='/services' className={styles.btn}>See How We Can Work Together</Link>
