@@ -53,7 +53,7 @@ export default function Page() {
                     </ul>
                 </Link>
             </div>
-            <div>Rates are offered on a sliding scale based on access to financial resources. We'll sort out the right rate together when you get in touch.</div>
+            <div>Rates are offered on a sliding scale based on access to financial resources. If you're not sure what to select, we'll sort out the right rate together when you get in touch.</div>
             <h3>What you can expect:</h3>
             <ul style={{marginTop: '0'}}>
                 <li>Programming designed for your body, your goals, and your life. Not a template.</li>
