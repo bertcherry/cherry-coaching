@@ -223,7 +223,12 @@ export async function POST(request) {
 
     // 2. Notify Bert. Retry a few times; record the outcome on the row.
     // A missing API key counts as a failure — Bert still needs to find out.
-    const apiKey = env.RESEND_API_KEY;
+    // Read from the request context binding first; fall back to process.env in
+    // case the key was configured as a plain build var rather than a binding.
+    const apiKey =
+        env.RESEND_API_KEY ||
+        (typeof process !== 'undefined' && process.env && process.env.RESEND_API_KEY) ||
+        undefined;
     let notified = false;
     let notifyReason = 'no-api-key';
     if (apiKey) {
