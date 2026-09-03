@@ -123,11 +123,14 @@ async function sendEmail(apiKey, payload) {
     });
     if (!res.ok) {
         const detail = await res.text().catch(() => '');
-        throw new Error(`Resend ${res.status}: ${detail}`);
+        const err = new Error(`Resend ${res.status}: ${detail}`);
+        err.status = res.status;
+        throw err;
     }
 }
 
 // Try the notification email a couple of times before giving up.
+// Returns { ok, reason } — reason is a leak-free category for diagnostics.
 async function sendNotification(apiKey, f) {
     const payload = {
         from: FROM,
@@ -136,16 +139,18 @@ async function sendNotification(apiKey, f) {
         subject: `Interest form: ${f.fullName}`,
         html: notificationHtml(f),
     };
+    let lastStatus = 0;
     for (let attempt = 1; attempt <= 3; attempt++) {
         try {
             await sendEmail(apiKey, payload);
-            return true;
+            return { ok: true, reason: 'sent' };
         } catch (err) {
+            lastStatus = err?.status || 0;
             console.error(`notification email attempt ${attempt} failed`, err);
             if (attempt < 3) await sleep(attempt * 500);
         }
     }
-    return false;
+    return { ok: false, reason: lastStatus ? `resend-http-${lastStatus}` : 'request-failed' };
 }
 
 export async function POST(request) {
@@ -220,8 +225,11 @@ export async function POST(request) {
     // A missing API key counts as a failure — Bert still needs to find out.
     const apiKey = env.RESEND_API_KEY;
     let notified = false;
+    let notifyReason = 'no-api-key';
     if (apiKey) {
-        notified = await sendNotification(apiKey, f);
+        const r = await sendNotification(apiKey, f);
+        notified = r.ok;
+        notifyReason = r.reason;
     } else {
         console.error('RESEND_API_KEY is not set for this deployment — cannot notify Bert');
     }
@@ -253,6 +261,7 @@ export async function POST(request) {
     }
 
     // The submission is saved either way. `notifyFailed` tells the form to ask the
-    // person to also reach out directly so Bert is sure to see it.
-    return Response.json({ ok: true, notifyFailed: !notified });
+    // person to also reach out directly so Bert is sure to see it. `notifyReason`
+    // is a leak-free category (no key, no PII) for diagnosing delivery problems.
+    return Response.json({ ok: true, notifyFailed: !notified, notifyReason });
 }
