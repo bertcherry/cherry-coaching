@@ -153,23 +153,6 @@ async function sendNotification(apiKey, f) {
     return { ok: false, reason: lastStatus ? `resend-http-${lastStatus}` : 'request-failed' };
 }
 
-// TEMP diagnostic: GET /api/interest?diag=env-keys lists the binding/var names
-// visible to the function (names only, no values). Remove once email works.
-export async function GET(request) {
-    const url = new URL(request.url);
-    if (url.searchParams.get('diag') === 'env-keys') {
-        const { env } = getRequestContext();
-        return Response.json({
-            envKeys: Object.keys(env || {}).sort(),
-            hasResendKey: Boolean(env && env.RESEND_API_KEY),
-            hasProcessEnvResend: Boolean(
-                typeof process !== 'undefined' && process.env && process.env.RESEND_API_KEY
-            ),
-        });
-    }
-    return new Response('Method Not Allowed', { status: 405 });
-}
-
 export async function POST(request) {
     const { env } = getRequestContext();
 

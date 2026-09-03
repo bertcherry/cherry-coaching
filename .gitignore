@@ -5,6 +5,8 @@ videos.sql
 /.wrangler
 .babelrc
 .dev.vars
+# local-dev only; prod config is in the Pages dashboard (see wrangler.example.toml)
+wrangler.toml
 
 # dependencies
 /node_modules

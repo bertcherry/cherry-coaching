@@ -1,0 +1,27 @@
+# Reference copy of the Cloudflare config. The real wrangler.toml is gitignored
+# and used ONLY for local `next dev` (it gives getRequestContext().env its D1
+# bindings). PRODUCTION config lives in the Cloudflare Pages dashboard —
+# committing a wrangler.toml makes Pages ignore dashboard secrets like
+# RESEND_API_KEY (https://github.com/cloudflare/next-on-pages/discussions/739).
+#
+# Dashboard settings that must match this file:
+#   Settings → Runtime → Compatibility date:  2024-09-23
+#   Settings → Runtime → Compatibility flags: nodejs_compat
+#   Settings → Build → Build output directory: .vercel/output/static
+#   Settings → Bindings → D1: videoDB → videos, siteDB → cherry-coaching
+#                            (Production AND Preview)
+compatibility_date = '2024-09-23'
+compatibility_flags = ["nodejs_compat"]
+pages_build_output_dir = ".vercel/output/static"
+
+[[d1_databases]]
+binding = 'videoDB'
+database_name = 'videos'
+database_id = 'e4f459c8-cfc2-4ba0-8f67-1d7bea98d088'
+preview_database_id = 'videoDB'
+
+[[d1_databases]]
+binding = 'siteDB'
+database_name = 'cherry-coaching'
+database_id = '7bf74309-5019-488a-b20b-84012674ce9e'
+preview_database_id = 'siteDB'
