@@ -3,6 +3,10 @@ compatibility_date = '2024-09-23'
 compatibility_flags = ["nodejs_compat"]
 pages_build_output_dir = ".vercel/output/static"
 
+# Don't let a deploy wipe dashboard-managed vars/secrets (e.g. RESEND_API_KEY)
+# that aren't declared in this file. wrangler.toml is otherwise "source of truth".
+keep_vars = true
+
 [[d1_databases]]
 binding = 'videoDB'
 database_name = 'videos'
