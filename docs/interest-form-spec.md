@@ -2,7 +2,42 @@
 
 Replace the externally-linked Google Form with a form embedded on the site.
 
-## Build status — built, tested locally, not yet deployed
+## Status — LIVE at cherry-coaching.com/interest
+
+Deployed and working end to end: submissions write to the `cherry-coaching` D1 database,
+Bert gets a notification email and the submitter gets a confirmation (Resend), spam honeypot
+in place. Accessibility pass done (see below). Home + Services link to `/interest`.
+
+**Config note:** this project used to carry a committed `wrangler.toml`. That made Cloudflare
+Pages treat the file as the sole source of runtime config and ignore the dashboard
+`RESEND_API_KEY` secret. `wrangler.toml` is now **gitignored / local-dev only**; production
+config (compat date/flags, build output dir, D1 bindings `videoDB` + `siteDB`, the Resend
+secret) lives in **Pages → Settings**. See `wrangler.example.toml`. The secret must be added
+via the dashboard or `wrangler pages secret put` (not committed — the repo is public), and a
+fresh deployment created after any change to it. The API response carries a leak-free
+`notifyReason` (`sent` / `no-api-key` / `resend-http-<code>`) for diagnosing mail problems.
+
+Left to do: clear the `*TEST*` / `*ignore*` / `DIAG*` rows from D1, and retire the Google Form.
+
+## Accessibility (WCAG 2.1 AA)
+
+Audited with axe-core (0 violations in default / errors-shown / panels-open states) plus
+manual keyboard and screen-reader-logic checks:
+
+- Landmarks: `<main>`, `<header>`, labelled `<nav>` (added to `layout.js`, helps every page).
+- Required fields: `required` + `aria-required`; the visible `*` is `aria-hidden` with a
+  "* indicates a required field" note.
+- Failed submit → an error summary (`role="alert"`, receives focus) listing each problem as a
+  link that focuses the field; every invalid control has `aria-invalid` +
+  `aria-describedby` → its message; groups wire the error to the `<fieldset>`.
+- `AgreementPanel` checkbox uses `aria-disabled` (stays focusable + announced, with a hint),
+  and "reached the end" is an IntersectionObserver sentinel — satisfied by mouse scroll,
+  keyboard scroll, screen-reader reading, or short-enough content.
+- "Other" text inputs have real `aria-label`s and sit outside the radio's `<label>`.
+- Focus moves to the success heading / error box after submit; smooth-scroll respects
+  `prefers-reduced-motion`. Focus rings on all controls. Contrast passes.
+
+## Build status (original)
 
 New files:
 - `src/app/interest/page.js` — route wrapper + metadata
