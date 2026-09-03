@@ -268,5 +268,17 @@ export async function POST(request) {
     // The submission is saved either way. `notifyFailed` tells the form to ask the
     // person to also reach out directly so Bert is sure to see it. `notifyReason`
     // is a leak-free category (no key, no PII) for diagnosing delivery problems.
-    return Response.json({ ok: true, notifyFailed: !notified, notifyReason });
+    const payload = { ok: true, notifyFailed: !notified, notifyReason };
+    // TEMP diagnostic — remove once email works. Names only, never values.
+    if (!notified) {
+        payload._diag = {
+            build: 'diag-2',
+            envKeys: Object.keys(env || {}).sort(),
+            processEnvKeys:
+                typeof process !== 'undefined' && process.env
+                    ? Object.keys(process.env).filter((k) => /RESEND|API|KEY|SECRET/i.test(k))
+                    : null,
+        };
+    }
+    return Response.json(payload);
 }
