@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import styles from './Interest.module.css';
 import AgreementPanel from './AgreementPanel';
@@ -27,6 +27,26 @@ const OTHER_MSG = {
     rateOther: 'Please specify the rate that fits your situation.',
     locationOther: 'Please specify your other location.',
 };
+
+// Field order + how to focus the first control of each, for the error summary.
+const FIELDS = [
+    { key: 'fullName', sel: '#fullName' },
+    { key: 'email', sel: '#email' },
+    { key: 'serviceType', sel: 'input[name="serviceType"]' },
+    { key: 'locations', sel: '#locations-group input' },
+    { key: 'locationOther', sel: '#locationOther' },
+    { key: 'goals', sel: '#goals' },
+    { key: 'injuries', sel: '#injuries' },
+    { key: 'availability', sel: '#availability' },
+    { key: 'frequency', sel: '#frequency' },
+    { key: 'referralSource', sel: 'input[name="referralSource"]' },
+    { key: 'referralOther', sel: '#referralOther' },
+    { key: 'rateTier', sel: 'input[name="rateTier"]' },
+    { key: 'rateOther', sel: '#rateOther' },
+    { key: 'paymentMethod', sel: 'input[name="paymentMethod"]' },
+    { key: 'agreedCancellation', sel: 'input[name="agreedCancellation"]' },
+    { key: 'agreedWaiver', sel: 'input[name="agreedWaiver"]' },
+];
 
 const emptyForm = {
     fullName: '',
@@ -56,12 +76,29 @@ const emptyForm = {
 const InterestForm = () => {
     const [form, setForm] = useState(emptyForm);
     const [errors, setErrors] = useState({});
+    const [attempted, setAttempted] = useState(false);
     const [status, setStatus] = useState('idle'); // idle | submitting | success | error
     const [notifyFailed, setNotifyFailed] = useState(false);
 
+    const formRef = useRef(null);
+    const summaryRef = useRef(null);
+    const successRef = useRef(null);
+    const netErrorRef = useRef(null);
+
+    const scrollBehavior = () =>
+        typeof window !== 'undefined' &&
+        window.matchMedia &&
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches
+            ? 'auto'
+            : 'smooth';
     const referralOtherRef = useRef(null);
     const rateOtherRef = useRef(null);
     const locationOtherRef = useRef(null);
+
+    useEffect(() => {
+        if (status === 'success') successRef.current?.focus();
+        if (status === 'error') netErrorRef.current?.focus();
+    }, [status]);
 
     const set = (name, value) => setForm((f) => ({ ...f, [name]: value }));
 
@@ -85,6 +122,14 @@ const InterestForm = () => {
 
     const focusSoon = (ref) => requestAnimationFrame(() => ref.current?.focus());
 
+    const focusField = (sel) => {
+        const el = formRef.current?.querySelector(sel);
+        if (el) {
+            el.focus({ preventScroll: true });
+            el.scrollIntoView({ block: 'center', behavior: scrollBehavior() });
+        }
+    };
+
     const toggleLocation = (value) => {
         setForm((f) => ({
             ...f,
@@ -98,24 +143,29 @@ const InterestForm = () => {
         const e = {};
         if (!form.fullName.trim()) e.fullName = 'Please enter your name.';
         if (!form.email.trim()) e.email = 'Please enter your email.';
-        else if (!EMAIL_RE.test(form.email.trim())) e.email = 'Please enter a valid email address.';
-        if (!form.serviceType) e.serviceType = 'Please choose one.';
-        if (form.locations.length === 0 && !(form.locationOtherChecked && form.locationOther.trim()))
+        else if (!EMAIL_RE.test(form.email.trim()))
+            e.email = 'Please enter a valid email address.';
+        if (!form.serviceType) e.serviceType = 'Please choose what you’re interested in.';
+        if (
+            form.locations.length === 0 &&
+            !(form.locationOtherChecked && form.locationOther.trim())
+        )
             e.locations = 'Please choose at least one location.';
         else if (form.locationOtherChecked && !form.locationOther.trim())
             e.locationOther = OTHER_MSG.locationOther;
         if (!form.goals.trim()) e.goals = 'Please tell me what you’re looking for.';
         if (!form.injuries.trim())
-            e.injuries = 'Please answer this — write "none" if that’s the case.';
+            e.injuries = 'Please answer the injuries question — write “none” if that’s the case.';
         if (!form.availability.trim()) e.availability = 'Please share your availability.';
-        if (!form.frequency.trim()) e.frequency = 'Please share how often you’d like to meet.';
-        if (!form.referralSource) e.referralSource = 'Please choose one.';
+        if (!form.frequency.trim())
+            e.frequency = 'Please share how often you’d like to meet.';
+        if (!form.referralSource) e.referralSource = 'Please choose how you heard about me.';
         else if (form.referralSource === OTHER && !form.referralOther.trim())
             e.referralOther = OTHER_MSG.referralOther;
         if (!form.rateTier) e.rateTier = 'Please choose a rate.';
         else if (form.rateTier === OTHER && !form.rateOther.trim())
             e.rateOther = OTHER_MSG.rateOther;
-        if (!form.paymentMethod) e.paymentMethod = 'Please choose one.';
+        if (!form.paymentMethod) e.paymentMethod = 'Please choose a payment method.';
         if (!form.agreedCancellation)
             e.agreedCancellation = 'You must agree to the cancellation policy to continue.';
         if (!form.agreedWaiver)
@@ -158,11 +208,12 @@ const InterestForm = () => {
 
     const handleSubmit = async (ev) => {
         ev.preventDefault();
+        setAttempted(true);
         const e = validate();
         setErrors(e);
         if (Object.keys(e).length > 0) {
-            const first = document.querySelector('[aria-invalid="true"], .' + styles.hasError);
-            if (first) first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            setStatus('idle');
+            requestAnimationFrame(() => summaryRef.current?.focus());
             return;
         }
 
@@ -177,11 +228,12 @@ const InterestForm = () => {
             if (res.ok) {
                 setNotifyFailed(!!data.notifyFailed);
                 setStatus('success');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                window.scrollTo({ top: 0, behavior: scrollBehavior() });
                 return;
             }
             if (res.status === 400 && data.errors) {
                 setErrors(data.errors);
+                requestAnimationFrame(() => summaryRef.current?.focus());
             }
             setStatus('error');
         } catch (err) {
@@ -192,7 +244,9 @@ const InterestForm = () => {
     if (status === 'success') {
         return (
             <div className={styles.wrap}>
-                <h1>Thanks — I’ve got your submission</h1>
+                <h1 ref={successRef} tabIndex={-1}>
+                    Thanks &mdash; I&rsquo;ve got your submission
+                </h1>
                 {notifyFailed ? (
                     <div className={styles.formError} role="alert">
                         <p>
@@ -201,14 +255,14 @@ const InterestForm = () => {
                             <a href="mailto:bert@cherry-coaching.com">
                                 bert@cherry-coaching.com
                             </a>{' '}
-                            so she’s sure to follow up.
+                            so she&rsquo;s sure to follow up.
                         </p>
                     </div>
                 ) : (
                     <p>
-                        I’ll do my best to reply within 48 hours (sometimes a little longer if
-                        you’re reaching out over a weekend). Check your inbox for a confirmation
-                        email; if it’s not there, check spam.
+                        I&rsquo;ll do my best to reply within 48 hours (sometimes a little
+                        longer if you&rsquo;re reaching out over a weekend). Check your inbox
+                        for a confirmation email; if it&rsquo;s not there, check spam.
                     </p>
                 )}
                 <p>
@@ -220,31 +274,75 @@ const InterestForm = () => {
 
     const err = (name) =>
         errors[name] ? (
-            <span className={styles.error} id={`${name}-error`} role="alert">
+            <span className={styles.error} id={`${name}-error`}>
                 {errors[name]}
             </span>
         ) : null;
 
     const describedBy = (name) => (errors[name] ? `${name}-error` : undefined);
     const invalid = (name) => (errors[name] ? 'true' : undefined);
+    const groupInvalid = (...names) => (names.some((n) => errors[n]) ? 'true' : undefined);
+    // Build an aria-describedby value: an optional static help id, plus the
+    // error-message id of any listed field that currently has an error.
+    const descIds = (baseId, ...names) =>
+        [baseId, ...names.filter((n) => errors[n]).map((n) => `${n}-error`)]
+            .filter(Boolean)
+            .join(' ') || undefined;
+
+    const errorList = FIELDS.filter((f) => errors[f.key]);
 
     return (
-        <form className={styles.wrap} onSubmit={handleSubmit} noValidate>
+        <form className={styles.wrap} onSubmit={handleSubmit} noValidate ref={formRef}>
             <h1>Interest Form</h1>
             <p className={styles.intro}>
                 Fill out this interest form and Bert will do her best to respond within 48 hours
                 (sometimes longer over a weekend).
             </p>
+            <p className={styles.reqNote}>
+                <span aria-hidden="true">*</span> indicates a required field.
+            </p>
+
+            {attempted && errorList.length > 0 && (
+                <div
+                    className={styles.errorSummary}
+                    role="alert"
+                    tabIndex={-1}
+                    ref={summaryRef}
+                    aria-labelledby="error-summary-title"
+                >
+                    <p id="error-summary-title">
+                        <strong>
+                            There {errorList.length === 1 ? 'is' : 'are'} {errorList.length}{' '}
+                            {errorList.length === 1 ? 'problem' : 'problems'} to fix:
+                        </strong>
+                    </p>
+                    <ul>
+                        {errorList.map((f) => (
+                            <li key={f.key}>
+                                <a
+                                    href={`#${f.key}`}
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        focusField(f.sel);
+                                    }}
+                                >
+                                    {errors[f.key]}
+                                </a>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            )}
 
             {status === 'error' && (
-                <div className={styles.formError} role="alert">
-                    Something went wrong submitting the form. Please check the fields above, or
-                    email <a href="mailto:bert@cherry-coaching.com">bert@cherry-coaching.com</a>{' '}
+                <div className={styles.formError} role="alert" tabIndex={-1} ref={netErrorRef}>
+                    Something went wrong submitting the form. Please try again, or email{' '}
+                    <a href="mailto:bert@cherry-coaching.com">bert@cherry-coaching.com</a>{' '}
                     directly.
                 </div>
             )}
 
-            {/* Honeypot: hidden from real users */}
+            {/* Honeypot: hidden from real users and assistive tech */}
             <div className={styles.hp} aria-hidden="true">
                 <label htmlFor="website">Website</label>
                 <input
@@ -262,11 +360,15 @@ const InterestForm = () => {
                 <legend>Contact</legend>
 
                 <div className={`${styles.field} ${errors.fullName ? styles.hasError : ''}`}>
-                    <label htmlFor="fullName">Full name *</label>
+                    <label htmlFor="fullName">
+                        Full name <span aria-hidden="true">*</span>
+                    </label>
                     <input
                         id="fullName"
                         type="text"
                         autoComplete="name"
+                        required
+                        aria-required="true"
                         value={form.fullName}
                         onChange={(e) => set('fullName', e.target.value)}
                         aria-invalid={invalid('fullName')}
@@ -286,11 +388,15 @@ const InterestForm = () => {
                 </div>
 
                 <div className={`${styles.field} ${errors.email ? styles.hasError : ''}`}>
-                    <label htmlFor="email">Email address *</label>
+                    <label htmlFor="email">
+                        Email address <span aria-hidden="true">*</span>
+                    </label>
                     <input
                         id="email"
                         type="email"
                         autoComplete="email"
+                        required
+                        aria-required="true"
                         value={form.email}
                         onChange={(e) => set('email', e.target.value)}
                         aria-invalid={invalid('email')}
@@ -313,17 +419,21 @@ const InterestForm = () => {
 
             <fieldset
                 className={`${styles.section} ${errors.serviceType ? styles.hasError : ''}`}
+                aria-describedby={descIds(null, 'serviceType')}
+                aria-invalid={groupInvalid('serviceType')}
             >
-                <legend>Which are you interested in? *</legend>
+                <legend>
+                    Which are you interested in? <span aria-hidden="true">*</span>
+                </legend>
                 {SERVICE_OPTIONS.map((opt) => (
                     <label key={opt} className={styles.choice}>
                         <input
                             type="radio"
                             name="serviceType"
                             value={opt}
+                            required
                             checked={form.serviceType === opt}
                             onChange={(e) => set('serviceType', e.target.value)}
-                            aria-describedby={describedBy('serviceType')}
                         />
                         {opt}
                     </label>
@@ -332,11 +442,17 @@ const InterestForm = () => {
             </fieldset>
 
             <fieldset
+                id="locations-group"
                 className={`${styles.section} ${
                     errors.locations || errors.locationOther ? styles.hasError : ''
                 }`}
+                aria-describedby={descIds(null, 'locations', 'locationOther')}
+                aria-invalid={groupInvalid('locations', 'locationOther')}
             >
-                <legend>At which location(s) are you interested in coaching? *</legend>
+                <legend>
+                    At which location(s) are you interested in coaching?{' '}
+                    <span aria-hidden="true">*</span>
+                </legend>
                 {LOCATION_OPTIONS.map((opt) => (
                     <label key={opt} className={styles.choice}>
                         <input
@@ -347,21 +463,25 @@ const InterestForm = () => {
                         {opt}
                     </label>
                 ))}
-                <label className={styles.choice}>
+                <div className={styles.choice}>
+                    <label className={styles.otherLabel}>
+                        <input
+                            type="checkbox"
+                            checked={form.locationOtherChecked}
+                            onChange={(e) => {
+                                set('locationOtherChecked', e.target.checked);
+                                if (e.target.checked) focusSoon(locationOtherRef);
+                                else clearErr('locationOther');
+                            }}
+                        />
+                        Other:
+                    </label>
                     <input
-                        type="checkbox"
-                        checked={form.locationOtherChecked}
-                        onChange={(e) => {
-                            set('locationOtherChecked', e.target.checked);
-                            if (e.target.checked) focusSoon(locationOtherRef);
-                            else clearErr('locationOther');
-                        }}
-                    />
-                    <span>Other:</span>
-                    <input
+                        id="locationOther"
                         ref={locationOtherRef}
                         type="text"
                         className={styles.otherInput}
+                        aria-label="Other location"
                         value={form.locationOther}
                         onChange={(e) => {
                             set('locationOther', e.target.value);
@@ -375,30 +495,34 @@ const InterestForm = () => {
                                 form.locationOther
                             )
                         }
-                        aria-label="Other location"
                         aria-invalid={invalid('locationOther')}
                         aria-describedby={describedBy('locationOther')}
                     />
-                </label>
+                </div>
                 {err('locations')}
                 {err('locationOther')}
             </fieldset>
 
             <fieldset className={styles.section}>
-                <legend>What you&apos;re looking for</legend>
+                <legend>What you&rsquo;re looking for</legend>
 
                 <div className={`${styles.field} ${errors.goals ? styles.hasError : ''}`}>
                     <label htmlFor="goals">
-                        What are you looking for from coaching? *
+                        What are you looking for from coaching?{' '}
+                        <span aria-hidden="true">*</span>
                     </label>
-                    <span className={styles.help}>As detailed as you can be, the better.</span>
+                    <span className={styles.help} id="goals-help">
+                        As detailed as you can be, the better.
+                    </span>
                     <textarea
                         id="goals"
                         rows={4}
+                        required
+                        aria-required="true"
                         value={form.goals}
                         onChange={(e) => set('goals', e.target.value)}
                         aria-invalid={invalid('goals')}
-                        aria-describedby={describedBy('goals')}
+                        aria-describedby={descIds('goals-help', 'goals')}
                     />
                     {err('goals')}
                 </div>
@@ -406,11 +530,14 @@ const InterestForm = () => {
                 <div className={`${styles.field} ${errors.injuries ? styles.hasError : ''}`}>
                     <label htmlFor="injuries">
                         Do you have any injuries or chronic illnesses that significantly impact
-                        your movement options or your ability to train consistently? *
+                        your movement options or your ability to train consistently?{' '}
+                        <span aria-hidden="true">*</span>
                     </label>
                     <textarea
                         id="injuries"
                         rows={3}
+                        required
+                        aria-required="true"
                         value={form.injuries}
                         onChange={(e) => set('injuries', e.target.value)}
                         aria-invalid={invalid('injuries')}
@@ -419,35 +546,46 @@ const InterestForm = () => {
                     {err('injuries')}
                 </div>
 
-                <div className={`${styles.field} ${errors.availability ? styles.hasError : ''}`}>
-                    <label htmlFor="availability">When are you available to train? *</label>
-                    <span className={styles.help}>
-                        Be as specific as possible, including preferred times and alternate times.
-                        e.g. Mondays between 3–6pm; mid-morning any weekday.
+                <div
+                    className={`${styles.field} ${errors.availability ? styles.hasError : ''}`}
+                >
+                    <label htmlFor="availability">
+                        When are you available to train? <span aria-hidden="true">*</span>
+                    </label>
+                    <span className={styles.help} id="availability-help">
+                        Be as specific as possible, including preferred times and alternate
+                        times. e.g. Mondays between 3&ndash;6pm; mid-morning any weekday.
                     </span>
                     <textarea
                         id="availability"
                         rows={3}
+                        required
+                        aria-required="true"
                         value={form.availability}
                         onChange={(e) => set('availability', e.target.value)}
                         aria-invalid={invalid('availability')}
-                        aria-describedby={describedBy('availability')}
+                        aria-describedby={descIds('availability-help', 'availability')}
                     />
                     {err('availability')}
                 </div>
 
                 <div className={`${styles.field} ${errors.frequency ? styles.hasError : ''}`}>
-                    <label htmlFor="frequency">How frequently do you want to work together? *</label>
-                    <span className={styles.help}>
+                    <label htmlFor="frequency">
+                        How frequently do you want to work together?{' '}
+                        <span aria-hidden="true">*</span>
+                    </label>
+                    <span className={styles.help} id="frequency-help">
                         e.g. twice a week; once a month with programming for two workouts.
                     </span>
                     <textarea
                         id="frequency"
                         rows={2}
+                        required
+                        aria-required="true"
                         value={form.frequency}
                         onChange={(e) => set('frequency', e.target.value)}
                         aria-invalid={invalid('frequency')}
-                        aria-describedby={describedBy('frequency')}
+                        aria-describedby={descIds('frequency-help', 'frequency')}
                     />
                     {err('frequency')}
                 </div>
@@ -455,7 +593,7 @@ const InterestForm = () => {
                 <div className={styles.field}>
                     <label htmlFor="extraNotes">
                         Any specific requests around coaching, accessibility needs, or anything
-                        else you&apos;d like to share at this stage?
+                        else you&rsquo;d like to share at this stage?
                     </label>
                     <textarea
                         id="extraNotes"
@@ -470,8 +608,12 @@ const InterestForm = () => {
                 className={`${styles.section} ${
                     errors.referralSource || errors.referralOther ? styles.hasError : ''
                 }`}
+                aria-describedby={descIds(null, 'referralSource', 'referralOther')}
+                aria-invalid={groupInvalid('referralSource', 'referralOther')}
             >
-                <legend>How did you hear about me? *</legend>
+                <legend>
+                    How did you hear about me? <span aria-hidden="true">*</span>
+                </legend>
                 {REFERRAL_OPTIONS.map((opt) => (
                     <React.Fragment key={opt}>
                         <label className={styles.choice}>
@@ -479,6 +621,7 @@ const InterestForm = () => {
                                 type="radio"
                                 name="referralSource"
                                 value={opt}
+                                required
                                 checked={form.referralSource === opt}
                                 onChange={(e) => {
                                     set('referralSource', e.target.value);
@@ -493,7 +636,7 @@ const InterestForm = () => {
                                     <label htmlFor="referralProvider">
                                         Who are they, and what do they see you for?
                                     </label>
-                                    <span className={styles.help}>
+                                    <span className={styles.help} id="referralProvider-help">
                                         With your okay, I like to coordinate with practitioners
                                         on your care.
                                     </span>
@@ -504,27 +647,33 @@ const InterestForm = () => {
                                         onChange={(e) =>
                                             set('referralProvider', e.target.value)
                                         }
+                                        aria-describedby="referralProvider-help"
                                     />
                                 </div>
                             )}
                     </React.Fragment>
                 ))}
-                <label className={styles.choice}>
+                <div className={styles.choice}>
+                    <label className={styles.otherLabel}>
+                        <input
+                            type="radio"
+                            name="referralSource"
+                            value={OTHER}
+                            required
+                            checked={form.referralSource === OTHER}
+                            onChange={(e) => {
+                                set('referralSource', e.target.value);
+                                focusSoon(referralOtherRef);
+                            }}
+                        />
+                        Other:
+                    </label>
                     <input
-                        type="radio"
-                        name="referralSource"
-                        value={OTHER}
-                        checked={form.referralSource === OTHER}
-                        onChange={(e) => {
-                            set('referralSource', e.target.value);
-                            focusSoon(referralOtherRef);
-                        }}
-                    />
-                    <span>Other:</span>
-                    <input
+                        id="referralOther"
                         ref={referralOtherRef}
                         type="text"
                         className={styles.otherInput}
+                        aria-label="Other: how you heard about me"
                         value={form.referralOther}
                         onChange={(e) => {
                             set('referralOther', e.target.value);
@@ -538,11 +687,10 @@ const InterestForm = () => {
                                 form.referralOther
                             )
                         }
-                        aria-label="Other source"
                         aria-invalid={invalid('referralOther')}
                         aria-describedby={describedBy('referralOther')}
                     />
-                </label>
+                </div>
                 {err('referralSource')}
                 {err('referralOther')}
             </fieldset>
@@ -551,22 +699,31 @@ const InterestForm = () => {
                 className={`${styles.section} ${
                     errors.rateTier || errors.rateOther ? styles.hasError : ''
                 }`}
+                aria-describedby={descIds('rate-help', 'rateTier', 'rateOther')}
+                aria-invalid={groupInvalid('rateTier', 'rateOther')}
             >
-                <legend>Which rate fits your situation? *</legend>
-                <span className={styles.help}>
+                <legend>
+                    Which rate fits your situation? <span aria-hidden="true">*</span>
+                </legend>
+                <span className={styles.help} id="rate-help">
                     All rates are offered on a sliding scale based on access to financial
-                    resources. Pick according to your situation now — if anything changes, let
-                    Bert know and we&apos;ll adjust.
+                    resources. Pick according to your situation now &mdash; if anything changes,
+                    let Bert know and we&rsquo;ll adjust.
                 </span>
 
                 <details className={styles.ratePanel}>
                     <summary>See all rates</summary>
-                    <div className={styles.rateScroll}>
+                    <div
+                        className={styles.rateScroll}
+                        role="group"
+                        aria-label="Rate table (scrolls horizontally on small screens)"
+                        tabIndex={0}
+                    >
                         <table className={styles.rateTable}>
                             <caption>Cherry Coaching rates by sliding-scale tier</caption>
                             <thead>
                                 <tr>
-                                    <th scope="col">&nbsp;</th>
+                                    <td />
                                     {RATE_TIERS.map((t) => (
                                         <th key={t} scope="col">
                                             {t}
@@ -587,8 +744,8 @@ const InterestForm = () => {
                         </table>
                     </div>
                     <p className={styles.rateNote}>
-                        Custom programming starts with 2–4 in-person assessment sessions billed
-                        at the 60-min session rate.
+                        Custom programming starts with 2&ndash;4 in-person assessment sessions
+                        billed at the 60-min session rate.
                     </p>
                 </details>
 
@@ -598,6 +755,7 @@ const InterestForm = () => {
                             type="radio"
                             name="rateTier"
                             value={opt}
+                            required
                             checked={form.rateTier === opt}
                             onChange={(e) => {
                                 set('rateTier', e.target.value);
@@ -607,22 +765,27 @@ const InterestForm = () => {
                         {opt}
                     </label>
                 ))}
-                <label className={styles.choice}>
+                <div className={styles.choice}>
+                    <label className={styles.otherLabel}>
+                        <input
+                            type="radio"
+                            name="rateTier"
+                            value={OTHER}
+                            required
+                            checked={form.rateTier === OTHER}
+                            onChange={(e) => {
+                                set('rateTier', e.target.value);
+                                focusSoon(rateOtherRef);
+                            }}
+                        />
+                        Other:
+                    </label>
                     <input
-                        type="radio"
-                        name="rateTier"
-                        value={OTHER}
-                        checked={form.rateTier === OTHER}
-                        onChange={(e) => {
-                            set('rateTier', e.target.value);
-                            focusSoon(rateOtherRef);
-                        }}
-                    />
-                    <span>Other:</span>
-                    <input
+                        id="rateOther"
                         ref={rateOtherRef}
                         type="text"
                         className={styles.otherInput}
+                        aria-label="Other rate"
                         value={form.rateOther}
                         onChange={(e) => {
                             set('rateOther', e.target.value);
@@ -632,22 +795,25 @@ const InterestForm = () => {
                         onBlur={() =>
                             blurOther('rateOther', form.rateTier === OTHER, form.rateOther)
                         }
-                        aria-label="Other rate"
                         aria-invalid={invalid('rateOther')}
                         aria-describedby={describedBy('rateOther')}
                     />
-                </label>
+                </div>
                 {err('rateTier')}
                 {err('rateOther')}
             </fieldset>
 
             <fieldset
                 className={`${styles.section} ${errors.paymentMethod ? styles.hasError : ''}`}
+                aria-describedby={descIds('payment-help', 'paymentMethod')}
+                aria-invalid={groupInvalid('paymentMethod')}
             >
-                <legend>Which payment method will you use? *</legend>
-                <span className={styles.help}>
+                <legend>
+                    Which payment method will you use? <span aria-hidden="true">*</span>
+                </legend>
+                <span className={styles.help} id="payment-help">
                     Bert accepts Venmo, Zelle, PayPal, or cash. PayPal is less preferable due to
-                    their fee structure, but works if it&apos;s the best option for you.
+                    their fee structure, but works if it&rsquo;s the best option for you.
                 </span>
                 {PAYMENT_OPTIONS.map((opt) => (
                     <label key={opt} className={styles.choice}>
@@ -655,6 +821,7 @@ const InterestForm = () => {
                             type="radio"
                             name="paymentMethod"
                             value={opt}
+                            required
                             checked={form.paymentMethod === opt}
                             onChange={(e) => set('paymentMethod', e.target.value)}
                         />
@@ -667,14 +834,19 @@ const InterestForm = () => {
             <fieldset className={styles.section}>
                 <legend>Agreements</legend>
                 <span className={styles.help}>
-                    Please open each of these and read to the end — the checkbox unlocks once
-                    you&apos;ve scrolled through.
+                    Open each of these and read to the end &mdash; the checkbox turns on once
+                    you&rsquo;ve reached the bottom.
                 </span>
 
                 <AgreementPanel
                     name="agreedCancellation"
                     summary="Cancellation policy"
-                    checkboxLabel="I have read and agree to the cancellation policy. *"
+                    checkboxLabel={
+                        <>
+                            I have read and agree to the cancellation policy.{' '}
+                            <span aria-hidden="true">*</span>
+                        </>
+                    }
                     checked={form.agreedCancellation}
                     onChange={(v) => set('agreedCancellation', v)}
                     error={errors.agreedCancellation}
@@ -689,12 +861,19 @@ const InterestForm = () => {
                 <AgreementPanel
                     name="agreedWaiver"
                     summary="Liability waiver and release of liability"
-                    checkboxLabel="I have read and agree to the liability waiver and release of liability. *"
+                    checkboxLabel={
+                        <>
+                            I have read and agree to the liability waiver and release of
+                            liability. <span aria-hidden="true">*</span>
+                        </>
+                    }
                     checked={form.agreedWaiver}
                     onChange={(v) => set('agreedWaiver', v)}
                     error={errors.agreedWaiver}
                 >
-                    <h3>{WAIVER_TITLE}</h3>
+                    <p className={styles.waiverTitle}>
+                        <strong>{WAIVER_TITLE}</strong>
+                    </p>
                     {WAIVER_PARAGRAPHS.map((p, i) => (
                         <p key={i}>{p}</p>
                     ))}

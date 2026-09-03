@@ -18,17 +18,17 @@ export default function RootLayout({ children }) {
             <body>
                 <noscript>You need to enable JavaScript to run this app.</noscript>
                 <div id="root">
-                <div className='banner'>
+                <header className='banner'>
                     <Link href='/' className='logo'><img src={logo.src} alt='Cherry Coaching'/></Link>
-                    <nav>
+                    <nav aria-label='Primary'>
                         <ul className='navList'>
                             <li><Link href='/'>Home</Link></li>
                             <li><Link href='/about'>About</Link></li>
                             <li><Link href='/services'>Services</Link></li>
                         </ul>
-                    </nav>    
-                </div>
-                <div className='app'>{children}</div>
+                    </nav>
+                </header>
+                <main className='app'>{children}</main>
                 </div>
             </body>
         </html>
