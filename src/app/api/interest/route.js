@@ -271,13 +271,15 @@ export async function POST(request) {
     const payload = { ok: true, notifyFailed: !notified, notifyReason };
     // TEMP diagnostic — remove once email works. Names only, never values.
     if (!notified) {
+        const pe =
+            typeof process !== 'undefined' && process.env ? process.env.RESEND_API_KEY : undefined;
         payload._diag = {
-            build: 'diag-2',
-            envKeys: Object.keys(env || {}).sort(),
-            processEnvKeys:
-                typeof process !== 'undefined' && process.env
-                    ? Object.keys(process.env).filter((k) => /RESEND|API|KEY|SECRET/i.test(k))
-                    : null,
+            build: 'diag-3',
+            envHasKey: 'RESEND_API_KEY' in (env || {}),
+            envValueType: typeof (env || {}).RESEND_API_KEY,
+            envValueLen: ((env || {}).RESEND_API_KEY || '').length,
+            processValueType: typeof pe,
+            processValueLen: (pe || '').length,
         };
     }
     return Response.json(payload);
