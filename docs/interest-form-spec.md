@@ -116,8 +116,20 @@ deploys automatically (no CI workflow in the repo — it's the Pages Git integra
 - Confirm the row: `npx wrangler d1 execute cherry-coaching --remote --command "SELECT * FROM interest_submissions"`
 - Confirm the notification email reaches bert.m.cherry@gmail.com and the confirmation email
   reaches the test address. Check neither is in spam.
-- Optionally test the failure path: set a bad `RESEND_API_KEY` briefly → the form should show
-  the "email Bert directly" fallback and the row's `notify_status` should be `failed`.
+
+**Diagnosing email failures.** The POST response carries `notifyReason` (leak-free — no key,
+no PII):
+
+| `notifyReason` | meaning | fix |
+|---|---|---|
+| `sent` | Resend accepted it | (delivery/spam issue if still missing) |
+| `no-api-key` | `RESEND_API_KEY` not visible to the function | add it to the **Production** env in the Pages dashboard, then **redeploy** (env vars are baked per-deployment) |
+| `resend-http-403` | domain not verified | finish `cherry-coaching.com` DNS verification in Resend |
+| `resend-http-401` | key invalid / typo / wrong scope | regenerate a sending key, re-paste, redeploy |
+| `resend-http-422` | bad `from`/`to` | `from` must be on the verified domain |
+| `request-failed` | network error reaching Resend | transient — retry |
+
+The row's `notify_status` mirrors this (`sent` / `failed`).
 
 ### 7. Retire the Google Form
 
