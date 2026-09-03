@@ -10,7 +10,7 @@ const Services = () => {
     return (
         <>
             <div className={styles.servicesDisplay}>
-                <h1 >1:1 Training Sessions & Custom Programming in Seattle</h1>
+                <h1 >1:1 Training Sessions & Custom Programming</h1>
                 <div>I offer two ways to work together, both using the same approach. Whether we work together in 1:1 sessions or I build out programming for you, everything is informed by your history, your current movement and life patterns, and where you're trying to go.</div>
                 <h2 id='training'>1:1 Training Sessions</h2>
                 <div>This is hands-on coaching where we work through every session together. I'm watching how you move, adjusting in real time, and building a picture of your body over time that informs everything we do.</div>
